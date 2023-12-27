@@ -1,5 +1,5 @@
 {
-  "name": "@acme/nextjs",
+  "name": "@filmrover/nextjs",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,17 +7,14 @@
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev",
-    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
+    "lint": "next lint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "start": "pnpm with-env next start",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/api": "workspace:^0.1.0",
-    "@acme/auth": "workspace:^0.1.0",
-    "@acme/db": "workspace:^0.1.0",
-    "@t3-oss/env-nextjs": "^0.7.1",
+    "@filmrover/api": "workspace:*",
     "@tanstack/react-query": "^5.8.7",
     "@tanstack/react-query-devtools": "^5.8.7",
     "@tanstack/react-query-next-experimental": "5.8.7",
@@ -32,10 +29,10 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:^0.2.0",
-    "@acme/prettier-config": "workspace:^0.1.0",
-    "@acme/tailwind-config": "workspace:^0.1.0",
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@filmrover/eslint-config": "workspace:*",
+    "@filmrover/prettier-config": "workspace:*",
+    "@filmrover/tailwind-config": "workspace:*",
+    "@filmrover/tsconfig": "workspace:*",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
@@ -48,10 +45,10 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base",
-      "@acme/eslint-config/nextjs",
-      "@acme/eslint-config/react"
+      "@filmrover/eslint-config/base",
+      "@filmrover/eslint-config/nextjs",
+      "@filmrover/eslint-config/react"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@filmrover/prettier-config"
 }

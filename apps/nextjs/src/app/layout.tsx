@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import "~/styles/globals.css";
+import "@/styles/globals.css";
 
 import { cache } from "react";
 import { headers } from "next/headers";
 
-import { env } from "~/env";
-import { TRPCReactProvider } from "~/trpc/react";
+import { TRPCReactProvider } from "@/trpc/react";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -16,22 +15,17 @@ const fontSans = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
+    process.env.VERCEL_ENV === "production"
+      ? "https://example.com/todo-prod-url"
       : "http://localhost:3000",
   ),
-  title: "Create T3 Turbo",
-  description: "Simple monorepo with shared backend for web & mobile apps",
+  title: "FilmRover",
+  description: "Wikipedia game, but for movies!",
   openGraph: {
-    title: "Create T3 Turbo",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
+    title: "FilmRover",
+    description: "Wikipedia game, but for movies!",
+    url: "https://exmaple.com/todo-prod-url",
+    siteName: "FilmRover",
   },
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "@acme/tailwind-config",
+  "name": "@filmrover/tailwind-config",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,9 +19,9 @@
     "tailwindcss": "3.4.0"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:^0.2.0",
-    "@acme/prettier-config": "workspace:^0.1.0",
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@filmrover/eslint-config": "workspace:*",
+    "@filmrover/prettier-config": "workspace:*",
+    "@filmrover/tsconfig": "workspace:*",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "typescript": "^5.3.3"
@@ -29,8 +29,8 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base"
+      "@filmrover/eslint-config/base"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@filmrover/prettier-config"
 }
