@@ -27,6 +27,7 @@ export const Autocomplete = ({
   searchPlaceholder = "",
   isLoading,
   emptyResultsText,
+  disabled,
 }: {
   value: string;
   options: { label: string; value: string }[];
@@ -39,6 +40,7 @@ export const Autocomplete = ({
   searchPlaceholder?: string;
   isLoading?: boolean;
   emptyResultsText?: string;
+  disabled?: boolean;
 }) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -48,6 +50,7 @@ export const Autocomplete = ({
           role="combobox"
           aria-expanded={open}
           className="w-[400px] justify-between"
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label ??
