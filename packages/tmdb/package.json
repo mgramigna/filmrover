@@ -1,7 +1,7 @@
 {
-  "name": "@filmrover/api",
-  "version": "0.1.0",
+  "name": "@filmrover/tmdb",
   "private": true,
+  "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -14,10 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@filmrover/tmdb": "workspace:*",
-    "@trpc/client": "next",
-    "@trpc/server": "next",
-    "superjson": "2.2.1",
+    "neverthrow": "^6.1.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -29,7 +26,6 @@
     "typescript": "^5.3.3"
   },
   "eslintConfig": {
-    "root": true,
     "extends": [
       "@filmrover/eslint-config/base"
     ]

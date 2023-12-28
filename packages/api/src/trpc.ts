@@ -2,13 +2,20 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-// eslint-disable-next-line @typescript-eslint/require-await
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+import { TMDBClient } from "@filmrover/tmdb";
+
+export const createTRPCContext = (opts: {
+  headers: Headers;
+  tmdbAccessToken: string;
+}) => {
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
 
   console.log(">>> tRPC Request from", source);
 
-  return {};
+  return {
+    source,
+    tmdb: new TMDBClient(opts.tmdbAccessToken),
+  };
 };
 
 const t = initTRPC.context<typeof createTRPCContext>().create({

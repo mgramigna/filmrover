@@ -1,9 +1,8 @@
-import { pingRouter } from "./router/ping";
+import { movieRouter } from "./router/movie";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  ping: pingRouter,
+  movie: movieRouter,
 });
 
-// export type definition of API
 export type AppRouter = typeof appRouter;

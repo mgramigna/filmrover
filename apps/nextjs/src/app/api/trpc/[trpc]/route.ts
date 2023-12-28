@@ -3,12 +3,6 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 import { appRouter, createTRPCContext } from "@filmrover/api";
 
-export const runtime = "edge";
-
-/**
- * Configure basic CORS headers
- * You should extend this to match your needs
- */
 function setCorsHeaders(res: Response) {
   res.headers.set("Access-Control-Allow-Origin", "*");
   res.headers.set("Access-Control-Request-Method", "*");
@@ -32,6 +26,7 @@ const handler = async (req: NextRequest) => {
     createContext: () =>
       createTRPCContext({
         headers: req.headers,
+        tmdbAccessToken: process.env.TMDB_ACCESS_TOKEN!,
       }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`, error);
