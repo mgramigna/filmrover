@@ -25,4 +25,26 @@ export const movieRouter = createTRPCRouter({
 
       return result.value;
     }),
+
+  getCreditsByMovieId: publicProcedure
+    .input(
+      z.object({
+        movieId: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const result = await ctx.tmdb.getCreditsForMovie({
+        movieId: input.movieId,
+      });
+
+      if (result.isErr()) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: result.error.message,
+          cause: result.error,
+        });
+      }
+
+      return result.value;
+    }),
 });
