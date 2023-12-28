@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
+import { TMDBImage } from "@/components/TMDBImage";
 import { Button } from "@/components/ui/button";
 import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
@@ -73,58 +74,36 @@ export default function GameIdPage() {
   return (
     <div className="container mt-12 flex flex-col items-center">
       <div className="flex w-full items-center justify-evenly">
-        {startMovie && (
-          <div>
-            <h3 className="text-3xl font-bold tracking-tight">
-              {startMovie.title}
-            </h3>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${startMovie.poster_path}`}
-              width={200}
-              height={300}
-              alt={`${startMovie.title} Poster`}
-            />
-          </div>
+        {startMovie?.poster_path && (
+          <TMDBImage
+            slug={startMovie.poster_path}
+            title={startMovie.title}
+            priority
+          />
         )}
-        {startPerson && (
-          <div>
-            <h3 className="text-3xl font-bold tracking-tight">
-              {startPerson.name}
-            </h3>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${startPerson.profile_path}`}
-              width={200}
-              height={300}
-              alt={`${startPerson.name} Picture`}
-            />
-          </div>
+        {startPerson?.profile_path && (
+          <TMDBImage
+            slug={startPerson.profile_path}
+            title={startPerson.name}
+            priority
+          />
         )}
-        <ArrowRight />
-        {endMovie && (
-          <div>
-            <h3 className="text-3xl font-bold tracking-tight">
-              {endMovie.title}
-            </h3>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${endMovie.poster_path}`}
-              width={200}
-              height={300}
-              alt={`${endMovie.title} Poster`}
-            />
-          </div>
+        <div className="h-10 w-10">
+          <ArrowRight className="h-full w-full" />
+        </div>
+        {endMovie?.poster_path && (
+          <TMDBImage
+            slug={endMovie.poster_path}
+            title={endMovie.title}
+            priority
+          />
         )}
-        {endPerson && (
-          <div>
-            <h3 className="text-3xl font-bold tracking-tight">
-              {endPerson.name}
-            </h3>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${endPerson.profile_path}`}
-              width={200}
-              height={300}
-              alt={`${endPerson.name} Picture`}
-            />
-          </div>
+        {endPerson?.profile_path && (
+          <TMDBImage
+            slug={endPerson.profile_path}
+            title={endPerson.name}
+            priority
+          />
         )}
       </div>
       {startMovieId && (

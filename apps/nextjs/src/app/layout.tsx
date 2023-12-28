@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
         <TRPCReactProvider headersPromise={getHeaders()}>
-          <main className="dark flex h-screen overflow-y-scroll bg-gradient-to-b from-slate-800 to-slate-950 text-white">
+          <main className="dark flex h-screen flex-col items-center overflow-y-scroll bg-gradient-to-b from-slate-800 to-slate-950 text-white">
             {children}
           </main>
         </TRPCReactProvider>

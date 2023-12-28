@@ -99,11 +99,9 @@ export default function MovieDetailPage() {
           <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
           {credits?.cast
             .sort((a, b) => b.popularity - a.popularity)
-            .map(({ id, name, character }) => (
+            .map(({ id, name }) => (
               <div key={id}>
-                <Link href={`/play/${gameId}/p/${id}`}>
-                  {name} ({character})
-                </Link>
+                <Link href={`/play/${gameId}/p/${id}`}>{name}</Link>
               </div>
             ))}
         </div>
