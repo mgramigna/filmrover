@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
 export default function GameIdPage() {
   const { gameId } = useParams<{ gameId: string }>();
+
+  const { start, time } = useTimer();
 
   const { data: game } = api.game.getById.useQuery({
     id: gameId,
@@ -38,6 +41,8 @@ export default function GameIdPage() {
       <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
         Game
       </h1>
+      <div>{time}</div>
+      <Button onClick={start}>Time</Button>
       {startMovieId && (
         <Link href={`/play/${gameId}/m/${startMovieId}`}>
           <Button>Start</Button>
