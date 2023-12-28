@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGame } from "@/context/GameContext";
 import { api } from "@/trpc/react";
 
 export default function MovieDetailPage() {
@@ -12,6 +13,8 @@ export default function MovieDetailPage() {
     gameId: string;
     movieId: string;
   }>();
+
+  const { isLoading: gameLoading } = useGame();
 
   const movieId = parseInt(movieIdString);
 
@@ -22,6 +25,10 @@ export default function MovieDetailPage() {
   const { data: credits } = api.movie.getCredits.useQuery({
     id: movieId,
   });
+
+  if (gameLoading) {
+    return null;
+  }
 
   const directors =
     credits?.crew.filter(

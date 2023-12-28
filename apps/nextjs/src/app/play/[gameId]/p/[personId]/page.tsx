@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { useGame } from "@/context/GameContext";
 import { api } from "@/trpc/react";
 
 export default function MovieDetailPage() {
@@ -10,6 +11,8 @@ export default function MovieDetailPage() {
     gameId: string;
     personId: string;
   }>();
+
+  const { isLoading: gameLoading } = useGame();
 
   const personId = parseInt(personIdString);
 
@@ -21,6 +24,10 @@ export default function MovieDetailPage() {
   const { data: credits } = api.person.getCredits.useQuery({
     id: personId,
   });
+
+  if (gameLoading) {
+    return null;
+  }
 
   return (
     <div className="container mt-12 flex w-full flex-col items-center">
