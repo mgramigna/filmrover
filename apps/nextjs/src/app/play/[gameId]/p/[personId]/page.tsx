@@ -13,39 +13,50 @@ export default function MovieDetailPage() {
 
   const personId = parseInt(personIdString);
 
-  const { data: person } = api.person.getById.useQuery({
-    id: personId,
-  });
+  const { data: person, isLoading: personLoading } =
+    api.person.getById.useQuery({
+      id: personId,
+    });
 
   const { data: credits } = api.person.getCredits.useQuery({
     id: personId,
   });
 
   return (
-    <div className="container mt-12 flex flex-col items-center">
-      {person && (
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          {person.name}
-        </h1>
+    <div className="container mt-12 flex w-full flex-col items-center">
+      {!personLoading && person && (
+        <div className="flex justify-center">
+          <h1 className="text-center text-5xl font-extrabold tracking-tight">
+            {person.name}
+          </h1>
+        </div>
       )}
-      {credits?.crew
-        .sort((a, b) => b.popularity - a.popularity)
-        .filter(({ media_type }) => media_type === "movie")
-        .map(({ id, title, job }) => (
-          <div key={`${id}-${job}`}>
-            <Link href={`/play/${gameId}/m/${id}`}>
-              {title} ({job})
-            </Link>
-          </div>
-        ))}
-      {credits?.cast
-        .sort((a, b) => b.popularity - a.popularity)
-        .filter(({ media_type }) => media_type === "movie")
-        .map(({ credit_id, id, title }) => (
-          <div key={credit_id}>
-            <Link href={`/play/${gameId}/m/${id}`}>{title}</Link>
-          </div>
-        ))}
+      <div className="mt-12 flex w-full">
+        <div>
+          <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+          {credits?.cast
+            .sort((a, b) => b.popularity - a.popularity)
+            .filter(({ media_type }) => media_type === "movie")
+            .map(({ credit_id, id, title }) => (
+              <div key={credit_id}>
+                <Link href={`/play/${gameId}/m/${id}`}>{title}</Link>
+              </div>
+            ))}
+        </div>
+        <div>
+          <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
+          {credits?.crew
+            .sort((a, b) => b.popularity - a.popularity)
+            .filter(({ media_type }) => media_type === "movie")
+            .map(({ id, title, job }) => (
+              <div key={`${id}-${job}`}>
+                <Link href={`/play/${gameId}/m/${id}`}>
+                  {title} ({job})
+                </Link>
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
   );
 }
