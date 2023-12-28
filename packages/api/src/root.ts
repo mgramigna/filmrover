@@ -1,3 +1,4 @@
+import { gameRouter } from "./router/game";
 import { movieRouter } from "./router/movie";
 import { personRouter } from "./router/person";
 import { createTRPCRouter } from "./trpc";
@@ -5,6 +6,7 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   movie: movieRouter,
   person: personRouter,
+  game: gameRouter,
 });
 
 export type AppRouter = typeof appRouter;

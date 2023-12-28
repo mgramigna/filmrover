@@ -35,6 +35,9 @@ importers:
       '@filmrover/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@filmrover/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.45)(react@18.2.0)
@@ -129,6 +132,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@filmrover/db':
+        specifier: workspace:*
+        version: link:../db
       '@filmrover/tmdb':
         specifier: workspace:*
         version: link:../tmdb

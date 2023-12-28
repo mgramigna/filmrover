@@ -2,6 +2,7 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import { db } from "@filmrover/db";
 import { TMDBClient } from "@filmrover/tmdb";
 
 export const createTRPCContext = (opts: {
@@ -15,6 +16,7 @@ export const createTRPCContext = (opts: {
   return {
     source,
     tmdb: new TMDBClient(opts.tmdbAccessToken),
+    db,
   };
 };
 

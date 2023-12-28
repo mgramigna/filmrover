@@ -7,3 +7,6 @@ const client = createClient({
 });
 
 export const db = drizzle(client);
+
+export * from "drizzle-orm";
+export * from "./schema";

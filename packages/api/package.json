@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@filmrover/db": "workspace:*",
     "@filmrover/tmdb": "workspace:*",
     "@trpc/client": "next",
     "@trpc/server": "next",
