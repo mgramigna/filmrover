@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { useGame } from "@/context/GameContext";
+import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
 export default function MovieDetailPage() {
@@ -12,7 +13,8 @@ export default function MovieDetailPage() {
     personId: string;
   }>();
 
-  const { isLoading: gameLoading } = useGame();
+  const { game, isLoading: gameLoading } = useGame();
+  const { pause } = useTimer();
 
   const personId = parseInt(personIdString);
 
@@ -27,6 +29,20 @@ export default function MovieDetailPage() {
 
   if (gameLoading) {
     return null;
+  }
+
+  if (personId === game?.endPersonId) {
+    pause();
+
+    return (
+      <div className="container mt-12 flex w-full flex-col items-center">
+        <div className="flex justify-center">
+          <h1 className="text-center text-5xl font-extrabold tracking-tight">
+            You win!
+          </h1>
+        </div>
+      </div>
+    );
   }
 
   return (

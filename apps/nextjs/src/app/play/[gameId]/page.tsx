@@ -1,16 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
 export default function GameIdPage() {
+  const router = useRouter();
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { start, time } = useTimer();
+  const { start } = useTimer();
 
   const { data: game } = api.game.getById.useQuery({
     id: gameId,
@@ -38,18 +40,47 @@ export default function GameIdPage() {
 
   return (
     <div className="container mt-12 flex flex-col items-center">
-      <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-        Game
-      </h1>
-      <div>{time}</div>
-      <Button onClick={start}>Time</Button>
+      <div className="flex w-full items-center justify-evenly">
+        {startMovie && (
+          <div>
+            <h3 className="text-3xl font-bold tracking-tight">
+              {startMovie.title}
+            </h3>
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${startMovie.poster_path}`}
+              width={200}
+              height={300}
+              alt={`${startMovie.title} Poster`}
+            />
+          </div>
+        )}
+        <ArrowRight />
+        {endMovie && (
+          <div>
+            <h3 className="text-3xl font-bold tracking-tight">
+              {endMovie.title}
+            </h3>
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${endMovie.poster_path}`}
+              width={200}
+              height={300}
+              alt={`${endMovie.title} Poster`}
+            />
+          </div>
+        )}
+      </div>
       {startMovieId && (
-        <Link href={`/play/${gameId}/m/${startMovieId}`}>
-          <Button>Start</Button>
-        </Link>
+        <div className="mt-12">
+          <Button
+            onClick={() => {
+              start();
+              router.push(`/play/${gameId}/m/${startMovieId}`);
+            }}
+          >
+            Start Game
+          </Button>
+        </div>
       )}
-      <div>{startMovie?.title}</div>
-      <div>{endMovie?.title}</div>
     </div>
   );
 }
