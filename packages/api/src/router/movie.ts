@@ -25,6 +25,27 @@ export const movieRouter = createTRPCRouter({
 
       return result.value;
     }),
+  search: publicProcedure
+    .input(
+      z.object({
+        q: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const result = await ctx.tmdb.searchMovieByTitle({
+        q: input.q.toLowerCase(),
+      });
+
+      if (result.isErr()) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: result.error.message,
+          cause: result.error,
+        });
+      }
+
+      return result.value;
+    }),
 
   getCredits: publicProcedure
     .input(

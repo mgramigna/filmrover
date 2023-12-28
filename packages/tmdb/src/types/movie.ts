@@ -61,3 +61,30 @@ export const MovieDetailSchema = z.object({
 });
 
 export type MovieDetail = z.infer<typeof MovieDetailSchema>;
+
+export const MovieSearchResultSchema = z.object({
+  page: z.number(),
+  results: MovieDetailSchema.pick({
+    id: true,
+    title: true,
+    original_title: true,
+    original_language: true,
+    adult: true,
+    backdrop_path: true,
+    overview: true,
+    popularity: true,
+    poster_path: true,
+    release_date: true,
+    video: true,
+    vote_average: true,
+    vote_count: true,
+  })
+    .extend({
+      genre_ids: z.number().array(),
+    })
+    .array(),
+  total_pages: z.number(),
+  total_results: z.number(),
+});
+
+export type MovieSearchResult = z.infer<typeof MovieSearchResultSchema>;
