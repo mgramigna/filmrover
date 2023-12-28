@@ -59,6 +59,7 @@ export const gameRouter = createTRPCRouter({
           startPersonId,
           endMovieId,
           endPersonId,
+          isFinished: false,
         })
         .returning({
           gameId: games.id,

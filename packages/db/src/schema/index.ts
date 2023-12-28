@@ -10,4 +10,5 @@ export const games = sqliteTable("games", {
   endMovieId: int("end_movie_id"),
   startPersonId: int("start_person_id"),
   endPersonId: int("end_person_id"),
+  isFinished: int("is_finished", { mode: "boolean" }),
 });
