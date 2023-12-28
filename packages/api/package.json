@@ -16,6 +16,7 @@
   "dependencies": {
     "@filmrover/db": "workspace:*",
     "@filmrover/tmdb": "workspace:*",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@trpc/client": "next",
     "@trpc/server": "next",
     "superjson": "2.2.1",
