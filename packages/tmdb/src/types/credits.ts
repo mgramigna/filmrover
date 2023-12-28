@@ -37,7 +37,10 @@ export const MovieCreditSchema = z.object({
     cast_id: z.number(),
     order: z.number().optional(),
   }).array(),
-  crew: CastOrCrewDetailSchema.array(),
+  crew: CastOrCrewDetailSchema.extend({
+    department: DepartmentSchema,
+    job: z.string(),
+  }).array(),
 });
 
 export type MovieCredit = z.infer<typeof MovieCreditSchema>;

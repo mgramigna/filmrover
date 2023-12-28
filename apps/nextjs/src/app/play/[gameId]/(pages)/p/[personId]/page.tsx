@@ -1,8 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { TMDBImage } from "@/components/TMDBImage";
+import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
 import { useGame } from "@/context/GameContext";
 import { api } from "@/trpc/react";
@@ -26,6 +30,22 @@ export default function PersonDetailPage() {
     id: personId,
   });
 
+  const filteredCast = useMemo(
+    () =>
+      credits?.cast
+        .sort((a, b) => b.popularity - a.popularity)
+        .filter(({ media_type }) => media_type === "movie") ?? [],
+    [credits],
+  );
+
+  const filteredCrew = useMemo(
+    () =>
+      credits?.crew
+        .sort((a, b) => b.popularity - a.popularity)
+        .filter(({ media_type }) => media_type === "movie") ?? [],
+    [credits],
+  );
+
   if (gameLoading) {
     return null;
   }
@@ -43,31 +63,39 @@ export default function PersonDetailPage() {
           </h1>
         </div>
       )}
-      <div className="mt-12 flex w-full">
-        <div>
-          <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-          {credits?.cast
-            .sort((a, b) => b.popularity - a.popularity)
-            .filter(({ media_type }) => media_type === "movie")
-            .map(({ credit_id, id, title }) => (
+      <div className="mt-12 flex w-full justify-center gap-8">
+        {personLoading && (
+          <div>
+            <Skeleton className="h-[300px] w-[200px] bg-slate-500" />
+          </div>
+        )}
+        {!personLoading && person?.profile_path && (
+          <TMDBImage slug={person.profile_path} priority />
+        )}
+      </div>
+      <div className="mt-12 flex w-full justify-evenly">
+        {filteredCast.length > 0 && (
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+            {filteredCast.map(({ credit_id, id, title }) => (
               <div key={credit_id}>
                 <Link href={`/play/${gameId}/m/${id}`}>{title}</Link>
               </div>
             ))}
-        </div>
-        <div>
-          <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-          {credits?.crew
-            .sort((a, b) => b.popularity - a.popularity)
-            .filter(({ media_type }) => media_type === "movie")
-            .map(({ id, title, job }) => (
+          </div>
+        )}
+        {filteredCrew.length > 0 && (
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
+            {filteredCrew.map(({ id, title, job }) => (
               <div key={`${id}-${job}`}>
                 <Link href={`/play/${gameId}/m/${id}`}>
                   {title} ({job})
                 </Link>
               </div>
             ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

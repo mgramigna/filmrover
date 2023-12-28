@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { TMDBImage } from "@/components/TMDBImage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
 import { useGame } from "@/context/GameContext";
@@ -31,23 +32,15 @@ export default function MovieDetailPage() {
     return null;
   }
 
-  const directors =
-    credits?.crew.filter(
-      ({ known_for_department }) => known_for_department === "Directing",
-    ) ?? [];
+  const directors = credits?.crew.filter(({ job }) => job === "Director") ?? [];
 
   const uniqueDirectors = [
     ...new Map(directors.map((item) => [item.id, item])).values(),
   ];
 
-  const crew =
-    credits?.crew.filter(
-      ({ known_for_department }) =>
-        known_for_department !== "Directing" &&
-        known_for_department !== "Acting",
-    ) ?? [];
-
-  const uniqueCrew = [...new Map(crew.map((item) => [item.id, item])).values()];
+  const uniqueCrew = [
+    ...new Map(credits?.crew.map((item) => [item.id, item]) ?? []).values(),
+  ];
 
   if (movieId === game?.endMovieId) {
     return <VictoryPage gameId={gameId} />;
@@ -67,52 +60,49 @@ export default function MovieDetailPage() {
           </h1>
         </div>
       )}
-      <div className="mt-12 flex w-full gap-8">
+      <div className="mt-12 flex w-full justify-center gap-8">
         {movieLoading && (
           <div>
             <Skeleton className="h-[300px] w-[200px] bg-slate-500" />
           </div>
         )}
         {!movieLoading && movie?.poster_path && (
-          <div>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-              width={200}
-              height={300}
-              alt={`${movie.title} Poster`}
-              priority
-            />
-          </div>
+          <TMDBImage slug={movie.poster_path} priority />
         )}
-        <div className="flex-1">
+      </div>
+      <div className="mt-12 flex w-full justify-evenly gap-8">
+        <div>
+          <h3 className="text-3xl font-extrabold tracking-tight">
+            Director(s)
+          </h3>
           {uniqueDirectors
             .sort((a, b) => b.popularity - a.popularity)
             .map(({ credit_id, name, id }) => (
               <div key={credit_id}>
-                <Link href={`/play/${gameId}/p/${id}`}>{name} (Director)</Link>
-              </div>
-            ))}
-        </div>
-      </div>
-      <div className="flex w-full gap-8">
-        <div>
-          <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-          {credits?.cast
-            .sort((a, b) => b.popularity - a.popularity)
-            .map(({ id, name }) => (
-              <div key={id}>
                 <Link href={`/play/${gameId}/p/${id}`}>{name}</Link>
               </div>
             ))}
         </div>
+        {credits && credits.cast.length > 0 && (
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+            {credits?.cast
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ id, name }) => (
+                <div key={id}>
+                  <Link href={`/play/${gameId}/p/${id}`}>{name}</Link>
+                </div>
+              ))}
+          </div>
+        )}
         <div>
           <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
           {uniqueCrew
             .sort((a, b) => b.popularity - a.popularity)
-            .map(({ id, credit_id, name, known_for_department }) => (
+            .map(({ id, credit_id, name, job }) => (
               <div key={credit_id}>
                 <Link href={`/play/${gameId}/p/${id}`}>
-                  {name} ({known_for_department})
+                  {name} ({job})
                 </Link>
               </div>
             ))}

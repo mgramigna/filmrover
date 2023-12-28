@@ -42,7 +42,7 @@ export default function PageLayout({
 
   return (
     <>
-      <div className="sticky top-0 flex h-16 w-full items-center justify-center bg-slate-800 p-4">
+      <div className="sticky top-0 z-50 flex h-16 w-full items-center justify-center bg-slate-800 p-4">
         {endMovie && (
           <div>
             Navigate to{" "}
