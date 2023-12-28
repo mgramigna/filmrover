@@ -18,7 +18,7 @@ export default function GameIdPage() {
     id: gameId,
   });
 
-  const { startMovieId, endMovieId } = game ?? {};
+  const { startMovieId, endMovieId, startPersonId, endPersonId } = game ?? {};
 
   const { data: startMovie } = api.movie.getById.useQuery(
     {
@@ -38,6 +38,24 @@ export default function GameIdPage() {
     },
   );
 
+  const { data: startPerson } = api.person.getById.useQuery(
+    {
+      id: startPersonId!,
+    },
+    {
+      enabled: !!startPersonId,
+    },
+  );
+
+  const { data: endPerson } = api.person.getById.useQuery(
+    {
+      id: endPersonId!,
+    },
+    {
+      enabled: !!endPersonId,
+    },
+  );
+
   return (
     <div className="container mt-12 flex flex-col items-center">
       <div className="flex w-full items-center justify-evenly">
@@ -51,6 +69,19 @@ export default function GameIdPage() {
               width={200}
               height={300}
               alt={`${startMovie.title} Poster`}
+            />
+          </div>
+        )}
+        {startPerson && (
+          <div>
+            <h3 className="text-3xl font-bold tracking-tight">
+              {startPerson.name}
+            </h3>
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${startPerson.profile_path}`}
+              width={200}
+              height={300}
+              alt={`${startPerson.name} Picture`}
             />
           </div>
         )}
@@ -68,6 +99,19 @@ export default function GameIdPage() {
             />
           </div>
         )}
+        {endPerson && (
+          <div>
+            <h3 className="text-3xl font-bold tracking-tight">
+              {endPerson.name}
+            </h3>
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${endPerson.profile_path}`}
+              width={200}
+              height={300}
+              alt={`${endPerson.name} Picture`}
+            />
+          </div>
+        )}
       </div>
       {startMovieId && (
         <div className="mt-12">
@@ -75,6 +119,18 @@ export default function GameIdPage() {
             onClick={() => {
               start();
               router.push(`/play/${gameId}/m/${startMovieId}`);
+            }}
+          >
+            Start Game
+          </Button>
+        </div>
+      )}
+      {startPersonId && (
+        <div className="mt-12">
+          <Button
+            onClick={() => {
+              start();
+              router.push(`/play/${gameId}/p/${startPersonId}`);
             }}
           >
             Start Game
