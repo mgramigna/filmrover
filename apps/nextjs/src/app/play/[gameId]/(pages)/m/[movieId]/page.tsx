@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { ClickableDetail } from "@/components/ClickableDetail";
 import { TMDBImage } from "@/components/TMDBImage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
@@ -79,37 +80,50 @@ export default function MovieDetailPage() {
           <h3 className="text-3xl font-extrabold tracking-tight">
             Director(s)
           </h3>
-          {uniqueDirectors
-            .sort((a, b) => b.popularity - a.popularity)
-            .map(({ credit_id, name, id }) => (
-              <div key={credit_id}>
-                <Link href={`/play/${gameId}/p/${id}`}>{name}</Link>
-              </div>
-            ))}
+          <div className="flex flex-col gap-2">
+            {uniqueDirectors
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ credit_id, name, id }) => (
+                <div key={credit_id}>
+                  <ClickableDetail
+                    href={`/play/${gameId}/p/${id}`}
+                    label={name}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
         {credits && credits.cast.length > 0 && (
           <div>
             <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            {credits?.cast
-              .sort((a, b) => b.popularity - a.popularity)
-              .map(({ id, name }) => (
-                <div key={id}>
-                  <Link href={`/play/${gameId}/p/${id}`}>{name}</Link>
-                </div>
-              ))}
+            <div className="flex flex-col gap-2">
+              {credits?.cast
+                .sort((a, b) => b.popularity - a.popularity)
+                .map(({ id, name }) => (
+                  <div key={id}>
+                    <ClickableDetail
+                      href={`/play/${gameId}/p/${id}`}
+                      label={name}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         )}
         <div>
           <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-          {uniqueCrew
-            .sort((a, b) => b.popularity - a.popularity)
-            .map(({ id, credit_id, name, job }) => (
-              <div key={credit_id}>
-                <Link href={`/play/${gameId}/p/${id}`}>
-                  {name} ({job})
-                </Link>
-              </div>
-            ))}
+          <div className="flex flex-col gap-2">
+            {uniqueCrew
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ id, credit_id, name, job }) => (
+                <div key={credit_id}>
+                  <ClickableDetail
+                    href={`/play/${gameId}/p/${id}`}
+                    label={`${name} (${job})`}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { ClickableDetail } from "@/components/ClickableDetail";
 import { TMDBImage } from "@/components/TMDBImage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
@@ -81,23 +81,33 @@ export default function PersonDetailPage() {
         {filteredCast.length > 0 && (
           <div>
             <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            {filteredCast.map(({ credit_id, id, title }) => (
-              <div key={credit_id}>
-                <Link href={`/play/${gameId}/m/${id}`}>{title}</Link>
-              </div>
-            ))}
+            <div className="flex flex-col gap-2">
+              {filteredCast.map(({ credit_id, id, title }) => (
+                <div key={credit_id}>
+                  {title && (
+                    <ClickableDetail
+                      href={`/play/${gameId}/m/${id}`}
+                      label={title}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {filteredCrew.length > 0 && (
           <div>
             <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-            {filteredCrew.map(({ id, title, job }) => (
-              <div key={`${id}-${job}`}>
-                <Link href={`/play/${gameId}/m/${id}`}>
-                  {title} ({job})
-                </Link>
-              </div>
-            ))}
+            <div className="flex flex-col gap-2">
+              {filteredCrew.map(({ id, title, job }) => (
+                <div key={`${id}-${job}`}>
+                  <ClickableDetail
+                    href={`/play/${gameId}/m/${id}`}
+                    label={`${title} (${job})`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
