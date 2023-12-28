@@ -7,7 +7,6 @@ import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
 import { useGame } from "@/context/GameContext";
-import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
 export default function MovieDetailPage() {
@@ -17,7 +16,6 @@ export default function MovieDetailPage() {
   }>();
 
   const { game, isLoading: gameLoading } = useGame();
-  const { pause } = useTimer();
 
   const movieId = parseInt(movieIdString);
 
