@@ -2,6 +2,14 @@ import { z } from "zod";
 
 import { BaseSearchResultSchema } from "./shared";
 
+export const PersonDetailSchema = z.object({
+  // TODO: make this an actually accurate type
+  id: z.number(),
+  name: z.string(),
+});
+
+export type PersonDetail = z.infer<typeof PersonDetailSchema>;
+
 export const PersonSearchResultSchema = BaseSearchResultSchema.extend({
   // TODO: make this an actually accurate type
   results: z

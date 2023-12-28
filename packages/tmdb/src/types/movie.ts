@@ -31,7 +31,7 @@ export const MovieDetailSchema = z.object({
   production_companies: z
     .object({
       id: z.number(),
-      logo_path: z.string(),
+      logo_path: z.string().nullable(),
       name: z.string(),
       origin_country: z.string(),
     })

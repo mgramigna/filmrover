@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 
 export default function GameIdPage() {
@@ -36,6 +38,11 @@ export default function GameIdPage() {
       <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
         Game
       </h1>
+      {startMovieId && (
+        <Link href={`/play/${gameId}/m/${startMovieId}`}>
+          <Button>Start</Button>
+        </Link>
+      )}
       <div>{startMovie?.title}</div>
       <div>{endMovie?.title}</div>
     </div>

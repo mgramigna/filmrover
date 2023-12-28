@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ReleaseDateSchema } from "./shared";
 
 const DepartmentSchema = z.enum([
+  "Creator",
   "Production",
   "Costume & Make-Up",
   "Lighting",
