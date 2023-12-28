@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ReleaseDateSchema } from "./shared";
+import { BaseSearchResultSchema, ReleaseDateSchema } from "./shared";
 
 export const MovieDetailSchema = z.object({
   id: z.number(),
@@ -62,8 +62,7 @@ export const MovieDetailSchema = z.object({
 
 export type MovieDetail = z.infer<typeof MovieDetailSchema>;
 
-export const MovieSearchResultSchema = z.object({
-  page: z.number(),
+export const MovieSearchResultSchema = BaseSearchResultSchema.extend({
   results: MovieDetailSchema.pick({
     id: true,
     title: true,
@@ -83,8 +82,6 @@ export const MovieSearchResultSchema = z.object({
       genre_ids: z.number().array(),
     })
     .array(),
-  total_pages: z.number(),
-  total_results: z.number(),
 });
 
 export type MovieSearchResult = z.infer<typeof MovieSearchResultSchema>;

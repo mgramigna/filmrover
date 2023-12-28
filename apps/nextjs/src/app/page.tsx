@@ -11,7 +11,6 @@ export default async function HomePage() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           FilmRover
         </h1>
-        <div>{movie.title}</div>
       </div>
     </main>
   );

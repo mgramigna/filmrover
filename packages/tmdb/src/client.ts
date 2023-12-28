@@ -4,8 +4,10 @@ import { ResultAsync } from "neverthrow";
 
 import type { MovieDetail, MovieSearchResult } from "./types";
 import type { MovieCredit, PersonCredit } from "./types/credits";
+import type { PersonSearchResult } from "./types/person";
 import { MovieDetailSchema, MovieSearchResultSchema } from "./types";
 import { MovieCreditSchema, PersonCreditSchema } from "./types/credits";
+import { PersonSearchResultSchema } from "./types/person";
 
 const TMDB_API_URL = "https://api.themoviedb.org/3";
 
@@ -98,15 +100,31 @@ export class TMDBClient {
   }
 
   async searchMovieByTitle({
-    q,
+    title,
   }: {
-    q: string;
+    title: string;
   }): Promise<Result<MovieSearchResult, Error>> {
     const result = await this.fetch({
       schema: MovieSearchResultSchema,
       path: "/search/movie",
       query: new URLSearchParams({
-        query: q,
+        query: title,
+      }).toString(),
+    });
+
+    return result;
+  }
+
+  async searchPersonByName({
+    name,
+  }: {
+    name: string;
+  }): Promise<Result<PersonSearchResult, Error>> {
+    const result = await this.fetch({
+      schema: PersonSearchResultSchema,
+      path: "/search/person",
+      query: new URLSearchParams({
+        query: name,
       }).toString(),
     });
 

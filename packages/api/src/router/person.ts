@@ -25,4 +25,25 @@ export const personRouter = createTRPCRouter({
 
       return result.value;
     }),
+  search: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const result = await ctx.tmdb.searchPersonByName({
+        name: input.name.toLowerCase(),
+      });
+
+      if (result.isErr()) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: result.error.message,
+          cause: result.error,
+        });
+      }
+
+      return result.value;
+    }),
 });

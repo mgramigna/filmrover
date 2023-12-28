@@ -28,12 +28,12 @@ export const movieRouter = createTRPCRouter({
   search: publicProcedure
     .input(
       z.object({
-        q: z.string(),
+        title: z.string(),
       }),
     )
     .query(async ({ input, ctx }) => {
       const result = await ctx.tmdb.searchMovieByTitle({
-        q: input.q.toLowerCase(),
+        title: input.title.toLowerCase(),
       });
 
       if (result.isErr()) {
