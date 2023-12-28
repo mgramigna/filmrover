@@ -2,14 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
 
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
-
-dayjs.extend(duration);
 
 export default function PageLayout({
   children,
@@ -56,7 +53,7 @@ export default function PageLayout({
           </div>
         )}
         <div className="absolute left-4 rounded-xl">
-          {dayjs.duration(time, "s").format("mm:ss")}
+          {dayjs().startOf("day").millisecond(time).format("mm:ss.SSS")}
         </div>
         {!game?.isFinished && (
           <div className="absolute right-4">

@@ -34,8 +34,8 @@ export const TimerProvider = ({ children }: PropsWithChildren) => {
 
     if (isRunning) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
     }
 
     return () => clearInterval(interval);
