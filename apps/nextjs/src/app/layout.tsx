@@ -32,12 +32,14 @@ export const metadata: Metadata = {
 // Lazy load headers
 const getHeaders = cache(() => Promise.resolve(headers()));
 
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
         <TRPCReactProvider headersPromise={getHeaders()}>
-          {props.children}
+          <main className="dark flex h-screen bg-gradient-to-b from-slate-800 to-slate-950 text-white">
+            {children}
+          </main>
         </TRPCReactProvider>
       </body>
     </html>

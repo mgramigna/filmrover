@@ -1,17 +1,39 @@
 import { init } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
-import { games } from "@filmrover/db";
+import { eq, games } from "@filmrover/db";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const gameRouter = createTRPCRouter({
-  listGames: publicProcedure.query(async ({ ctx }) => {
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const [result] = await ctx.db
+        .select()
+        .from(games)
+        .where(eq(games.id, input.id));
+
+      if (!result) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Game ${input.id} does not exist`,
+        });
+      }
+
+      return result;
+    }),
+  list: publicProcedure.query(async ({ ctx }) => {
     const result = await ctx.db.select().from(games);
 
     return result;
   }),
-  createGame: publicProcedure.mutation(async ({ ctx }) => {
+  create: publicProcedure.mutation(async ({ ctx }) => {
     const createId = init({
       length: 10,
     });
