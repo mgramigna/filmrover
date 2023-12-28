@@ -33,29 +33,44 @@ export const gameRouter = createTRPCRouter({
 
     return result;
   }),
-  create: publicProcedure.mutation(async ({ ctx }) => {
-    const createId = init({
-      length: 10,
-    });
+  create: publicProcedure
+    .input(
+      z.object({
+        startMovieId: z.number().nullish().default(null),
+        endMovieId: z.number().nullish().default(null),
+        startPersonId: z.number().nullish().default(null),
+        endPersonId: z.number().nullish().default(null),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { startMovieId, startPersonId, endMovieId, endPersonId } = input;
 
-    const id = createId();
-
-    const [result] = await ctx.db
-      .insert(games)
-      .values({
-        id,
-      })
-      .returning({
-        gameId: games.id,
+      const createId = init({
+        length: 10,
       });
 
-    if (!result) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Error creating game",
-      });
-    }
+      const id = createId();
 
-    return result.gameId;
-  }),
+      const [result] = await ctx.db
+        .insert(games)
+        .values({
+          id,
+          startMovieId,
+          startPersonId,
+          endMovieId,
+          endPersonId,
+        })
+        .returning({
+          gameId: games.id,
+        });
+
+      if (!result) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error creating game",
+        });
+      }
+
+      return result.gameId;
+    }),
 });

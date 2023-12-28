@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
@@ -38,7 +38,11 @@ const CreateGameFormSchema = z.union([
 
 export type CreateGameFormType = z.infer<typeof CreateGameFormSchema>;
 
-export const CreateGameForm = () => {
+export const CreateGameForm = ({
+  onSubmit,
+}: {
+  onSubmit: (form: CreateGameFormType) => void;
+}) => {
   const {
     formState: { isValid },
     control,
@@ -82,10 +86,6 @@ export const CreateGameForm = () => {
   >([]);
   const [endPersonQueryText, setEndPersonQueryText] = useState("");
   const debouncedEndPerson = useDebouncedSearch(endPersonQueryText, 1000);
-
-  const onSubmit = useCallback((form: CreateGameFormType) => {
-    console.log(form);
-  }, []);
 
   const { data: startMovies, isLoading: startMoviesLoading } =
     api.movie.search.useQuery(
