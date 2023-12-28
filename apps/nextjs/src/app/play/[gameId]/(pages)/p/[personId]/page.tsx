@@ -3,18 +3,17 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
+import { VictoryPage } from "@/components/VictoryPage";
 import { useGame } from "@/context/GameContext";
-import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
-export default function MovieDetailPage() {
+export default function PersonDetailPage() {
   const { gameId, personId: personIdString } = useParams<{
     gameId: string;
     personId: string;
   }>();
 
   const { game, isLoading: gameLoading } = useGame();
-  const { pause } = useTimer();
 
   const personId = parseInt(personIdString);
 
@@ -32,17 +31,7 @@ export default function MovieDetailPage() {
   }
 
   if (personId === game?.endPersonId) {
-    pause();
-
-    return (
-      <div className="container mt-12 flex w-full flex-col items-center">
-        <div className="flex justify-center">
-          <h1 className="text-center text-5xl font-extrabold tracking-tight">
-            You win!
-          </h1>
-        </div>
-      </div>
-    );
+    return <VictoryPage gameId={gameId} />;
   }
 
   return (

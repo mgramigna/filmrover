@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
@@ -55,6 +56,19 @@ export default function GameIdPage() {
       enabled: !!endPersonId,
     },
   );
+
+  if (game?.isFinished) {
+    return (
+      <div className="container mt-12 flex flex-col items-center">
+        <h3 className="text-3xl font-bold tracking-tight">Game Ended</h3>
+        <div>This game has already been completed</div>
+
+        <Link href="/play">
+          <Button>Start a New Game</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-12 flex flex-col items-center">

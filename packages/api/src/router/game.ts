@@ -74,4 +74,18 @@ export const gameRouter = createTRPCRouter({
 
       return result.gameId;
     }),
+  complete: publicProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(games)
+        .set({
+          isFinished: true,
+        })
+        .where(eq(games.id, input.gameId));
+    }),
 });

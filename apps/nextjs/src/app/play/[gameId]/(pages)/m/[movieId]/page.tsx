@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { VictoryPage } from "@/components/VictoryPage";
 import { useGame } from "@/context/GameContext";
 import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
@@ -51,17 +52,7 @@ export default function MovieDetailPage() {
   const uniqueCrew = [...new Map(crew.map((item) => [item.id, item])).values()];
 
   if (movieId === game?.endMovieId) {
-    pause();
-
-    return (
-      <div className="container mt-12 flex w-full flex-col items-center">
-        <div className="flex justify-center">
-          <h1 className="text-center text-5xl font-extrabold tracking-tight">
-            You win!
-          </h1>
-        </div>
-      </div>
-    );
+    return <VictoryPage gameId={gameId} />;
   }
 
   return (
