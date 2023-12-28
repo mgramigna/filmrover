@@ -28,8 +28,19 @@ export default function MovieDetailPage() {
           {person.name}
         </h1>
       )}
+      {credits?.crew
+        .sort((a, b) => b.popularity - a.popularity)
+        .filter(({ media_type }) => media_type === "movie")
+        .map(({ id, title, job }) => (
+          <div key={`${id}-${job}`}>
+            <Link href={`/play/${gameId}/m/${id}`}>
+              {title} ({job})
+            </Link>
+          </div>
+        ))}
       {credits?.cast
         .sort((a, b) => b.popularity - a.popularity)
+        .filter(({ media_type }) => media_type === "movie")
         .map(({ credit_id, id, title }) => (
           <div key={credit_id}>
             <Link href={`/play/${gameId}/m/${id}`}>{title}</Link>

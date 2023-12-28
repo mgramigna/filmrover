@@ -21,7 +21,7 @@ export const MovieDetailSchema = z.object({
       name: z.string(),
     })
     .array(),
-  homepage: z.string().url(),
+  homepage: z.string(),
   imdb_id: z.string(),
   original_language: z.string(),
   original_title: z.string().optional(),
