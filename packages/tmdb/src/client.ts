@@ -3,9 +3,9 @@ import type { ZodType, ZodTypeDef } from "zod";
 import { ResultAsync } from "neverthrow";
 
 import type { MovieDetail } from "./types";
-import type { MovieCredit } from "./types/credits";
+import type { MovieCredit, PersonCredit } from "./types/credits";
 import { MovieDetailSchema } from "./types";
-import { MovieCreditSchema } from "./types/credits";
+import { MovieCreditSchema, PersonCreditSchema } from "./types/credits";
 
 const TMDB_API_URL = "https://api.themoviedb.org/3";
 
@@ -79,6 +79,19 @@ export class TMDBClient {
     const result = await this.fetch({
       schema: MovieCreditSchema,
       path: `/movie/${movieId}/credits`,
+    });
+
+    return result;
+  }
+
+  async getCreditsForPerson({
+    personId,
+  }: {
+    personId: number;
+  }): Promise<Result<PersonCredit, Error>> {
+    const result = await this.fetch({
+      schema: PersonCreditSchema,
+      path: `/person/${personId}/combined_credits`,
     });
 
     return result;

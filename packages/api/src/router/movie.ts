@@ -26,15 +26,15 @@ export const movieRouter = createTRPCRouter({
       return result.value;
     }),
 
-  getCreditsByMovieId: publicProcedure
+  getCredits: publicProcedure
     .input(
       z.object({
-        movieId: z.number(),
+        id: z.number(),
       }),
     )
     .query(async ({ input, ctx }) => {
       const result = await ctx.tmdb.getCreditsForMovie({
-        movieId: input.movieId,
+        movieId: input.id,
       });
 
       if (result.isErr()) {

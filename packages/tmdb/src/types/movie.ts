@@ -1,15 +1,17 @@
 import { z } from "zod";
 
+import { ReleaseDateSchema } from "./shared";
+
 export const MovieDetailSchema = z.object({
   id: z.number(),
   adult: z.boolean(),
-  backdrop_path: z.string(),
+  backdrop_path: z.string().nullable(),
   belongs_to_collection: z
     .object({
       id: z.number(),
       name: z.string(),
-      poster_path: z.string(),
-      backdrop_path: z.string(),
+      poster_path: z.string().nullable(),
+      backdrop_path: z.string().nullable(),
     })
     .nullable(),
   budget: z.number(),
@@ -22,10 +24,10 @@ export const MovieDetailSchema = z.object({
   homepage: z.string().url(),
   imdb_id: z.string(),
   original_language: z.string(),
-  original_title: z.string(),
+  original_title: z.string().optional(),
   overview: z.string(),
   popularity: z.number(),
-  poster_path: z.string(),
+  poster_path: z.string().nullable(),
   production_companies: z
     .object({
       id: z.number(),
@@ -40,7 +42,7 @@ export const MovieDetailSchema = z.object({
       name: z.string(),
     })
     .array(),
-  release_date: z.string().regex(/\d\d\d\d-\d\d-\d\d/),
+  release_date: ReleaseDateSchema,
   revenue: z.number(),
   runtime: z.number(),
   spoken_languages: z
