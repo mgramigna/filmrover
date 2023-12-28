@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -66,11 +65,16 @@ export default function PersonDetailPage() {
       <div className="mt-12 flex w-full justify-center gap-8">
         {personLoading && (
           <div>
-            <Skeleton className="h-[300px] w-[200px] bg-slate-500" />
+            <Skeleton className="relative h-[150px] w-[100px] flex-1 rounded-lg border border-slate-100 bg-slate-500 sm:h-[300px] sm:w-[200px]" />
           </div>
         )}
         {!personLoading && person?.profile_path && (
           <TMDBImage slug={person.profile_path} priority />
+        )}
+        {!personLoading && person && !person.profile_path && (
+          <div className="flex h-[150px] w-[100px] rounded-lg border border-slate-100 bg-slate-700 sm:h-[300px] sm:w-[200px]">
+            <div className="m-auto">No Image</div>
+          </div>
         )}
       </div>
       <div className="mt-12 flex w-full justify-evenly">

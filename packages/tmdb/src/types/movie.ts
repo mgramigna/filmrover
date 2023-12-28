@@ -22,7 +22,7 @@ export const MovieDetailSchema = z.object({
     })
     .array(),
   homepage: z.string(),
-  imdb_id: z.string(),
+  imdb_id: z.string().nullable(),
   original_language: z.string(),
   original_title: z.string().optional(),
   overview: z.string(),
