@@ -1,4 +1,7 @@
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import type { DefaultValues } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
@@ -40,11 +43,60 @@ const CreateGameFormSchema = z.union([
 
 export type CreateGameFormType = z.infer<typeof CreateGameFormSchema>;
 
+type SearchParamKey = "startMovie" | "endMovie" | "startPerson" | "endPerson";
+
+const getSearchParam = (params: ReadonlyURLSearchParams, key: SearchParamKey) =>
+  params.get(key) ?? undefined;
+
+const parseSearchParam = (val: string | undefined): number | undefined =>
+  val && !isNaN(parseInt(val)) ? parseInt(val) : undefined;
+
+const getDefaultValues = ({
+  existingStartMovieParam,
+  existingStartPersonParam,
+  existingEndMovieParam,
+  existingEndPersonParam,
+}: {
+  existingStartMovieParam?: string;
+  existingStartPersonParam?: string;
+  existingEndMovieParam?: string;
+  existingEndPersonParam?: string;
+}): DefaultValues<CreateGameFormType> => {
+  const res: DefaultValues<CreateGameFormType> = {};
+
+  if (existingStartMovieParam) {
+    res.startMovieId = parseSearchParam(existingStartMovieParam);
+  }
+
+  if (!existingStartMovieParam && existingStartPersonParam) {
+    res.startPersonId = parseSearchParam(existingStartPersonParam);
+  }
+
+  if (existingEndMovieParam) {
+    res.endMovieId = parseSearchParam(existingEndMovieParam);
+  }
+
+  if (!existingEndMovieParam && existingEndPersonParam) {
+    res.endPersonId = parseSearchParam(existingEndPersonParam);
+  }
+
+  return res;
+};
+
 export const CreateGameForm = ({
   onSubmit,
 }: {
   onSubmit: (form: CreateGameFormType) => void;
 }) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const existingStartMovieParam = getSearchParam(searchParams, "startMovie");
+  const existingStartPersonParam = getSearchParam(searchParams, "startPerson");
+  const existingEndMovieParam = getSearchParam(searchParams, "endMovie");
+  const existingEndPersonParam = getSearchParam(searchParams, "endPerson");
+
   const {
     formState: { isValid },
     control,
@@ -54,6 +106,12 @@ export const CreateGameForm = ({
     watch,
   } = useForm<CreateGameFormType>({
     resolver: zodResolver(CreateGameFormSchema),
+    defaultValues: getDefaultValues({
+      existingStartMovieParam,
+      existingStartPersonParam,
+      existingEndMovieParam,
+      existingEndPersonParam,
+    }),
   });
 
   const currentStartMovieId = watch("startMovieId");
@@ -132,6 +190,27 @@ export const CreateGameForm = ({
   const { data: popularMovies } = api.movie.getPopularList.useQuery({});
   const { data: popularPeople } = api.person.getPopularList.useQuery({});
 
+  const updateQueryParams = useCallback(
+    (values: { key: SearchParamKey; value: string }[]) => {
+      const currentParams = new URLSearchParams(
+        Array.from(searchParams.entries()),
+      );
+      values.forEach(({ key, value }) => {
+        if (value === "") {
+          currentParams.delete(key);
+        } else {
+          currentParams.set(key, value);
+        }
+      });
+
+      const search = currentParams.toString();
+      const query = search !== "" ? `?${search}` : "";
+
+      router.push(`${pathname}${query}`);
+    },
+    [pathname, router, searchParams],
+  );
+
   useEffect(() => {
     const newResults =
       startMovies?.results
@@ -185,7 +264,18 @@ export const CreateGameForm = ({
       shouldValidate: true,
       shouldDirty: true,
     });
-  }, [setValue]);
+
+    updateQueryParams([
+      {
+        key: "startMovie",
+        value: "",
+      },
+      {
+        key: "startPerson",
+        value: "",
+      },
+    ]);
+  }, [setValue, updateQueryParams]);
 
   const clearEnd = useCallback(() => {
     setValue("endMovieId", undefined, {
@@ -196,7 +286,17 @@ export const CreateGameForm = ({
       shouldValidate: true,
       shouldDirty: true,
     });
-  }, [setValue]);
+    updateQueryParams([
+      {
+        key: "endMovie",
+        value: "",
+      },
+      {
+        key: "endPerson",
+        value: "",
+      },
+    ]);
+  }, [setValue, updateQueryParams]);
 
   const { data: selectedStartMovie } = api.movie.getById.useQuery(
     {
@@ -256,6 +356,17 @@ export const CreateGameForm = ({
         shouldValidate: true,
         shouldDirty: true,
       });
+
+      updateQueryParams([
+        {
+          key: "startMovie",
+          value: randomChoice?.id.toString() ?? "",
+        },
+        {
+          key: "startPerson",
+          value: "",
+        },
+      ]);
     } else {
       setValue("startMovieId", undefined, {
         shouldValidate: true,
@@ -265,8 +376,19 @@ export const CreateGameForm = ({
         shouldValidate: true,
         shouldDirty: true,
       });
+
+      updateQueryParams([
+        {
+          key: "startPerson",
+          value: randomChoice?.id.toString() ?? "",
+        },
+        {
+          key: "startMovie",
+          value: "",
+        },
+      ]);
     }
-  }, [popularMovies, popularPeople, setValue]);
+  }, [popularMovies, popularPeople, setValue, updateQueryParams]);
 
   const selectRandomEnd = useCallback(() => {
     if (!(popularMovies && popularPeople)) return;
@@ -288,6 +410,16 @@ export const CreateGameForm = ({
         shouldValidate: true,
         shouldDirty: true,
       });
+      updateQueryParams([
+        {
+          key: "endMovie",
+          value: randomChoice?.id.toString() ?? "",
+        },
+        {
+          key: "endPerson",
+          value: "",
+        },
+      ]);
     } else {
       setValue("endMovieId", undefined, {
         shouldValidate: true,
@@ -297,8 +429,18 @@ export const CreateGameForm = ({
         shouldValidate: true,
         shouldDirty: true,
       });
+      updateQueryParams([
+        {
+          key: "endMovie",
+          value: "",
+        },
+        {
+          key: "endPerson",
+          value: randomChoice?.id.toString() ?? "",
+        },
+      ]);
     }
-  }, [popularMovies, popularPeople, setValue]);
+  }, [popularMovies, popularPeople, setValue, updateQueryParams]);
 
   return (
     <div className="container flex flex-col items-center">
@@ -315,9 +457,15 @@ export const CreateGameForm = ({
                 <Autocomplete
                   open={startMovieOpen}
                   setOpen={setStartMovieOpen}
-                  onSelectOption={(id) =>
-                    onChange(id !== "" ? parseInt(id) : null)
-                  }
+                  onSelectOption={(id) => {
+                    onChange(id !== "" ? parseInt(id) : null);
+                    updateQueryParams([
+                      {
+                        key: "startMovie",
+                        value: id,
+                      },
+                    ]);
+                  }}
                   value={value ? value.toString() : ""}
                   searchText={startMovieQueryText}
                   setSearchText={setStartMovieQueryText}
@@ -339,9 +487,15 @@ export const CreateGameForm = ({
                 <Autocomplete
                   open={startPersonOpen}
                   setOpen={setStartPersonOpen}
-                  onSelectOption={(id) =>
-                    onChange(id !== "" ? parseInt(id) : null)
-                  }
+                  onSelectOption={(id) => {
+                    onChange(id !== "" ? parseInt(id) : null);
+                    updateQueryParams([
+                      {
+                        key: "startPerson",
+                        value: id,
+                      },
+                    ]);
+                  }}
                   value={value ? value.toString() : ""}
                   searchText={startPersonQueryText}
                   setSearchText={setStartPersonQueryText}
@@ -402,9 +556,15 @@ export const CreateGameForm = ({
                 <Autocomplete
                   open={endMovieOpen}
                   setOpen={setEndMovieOpen}
-                  onSelectOption={(id) =>
-                    onChange(id !== "" ? parseInt(id) : null)
-                  }
+                  onSelectOption={(id) => {
+                    onChange(id !== "" ? parseInt(id) : null);
+                    updateQueryParams([
+                      {
+                        key: "endMovie",
+                        value: id,
+                      },
+                    ]);
+                  }}
                   value={value ? value.toString() : ""}
                   searchText={endMovieQueryText}
                   setSearchText={setEndMovieQueryText}
@@ -426,9 +586,15 @@ export const CreateGameForm = ({
                 <Autocomplete
                   open={endPersonOpen}
                   setOpen={setEndPersonOpen}
-                  onSelectOption={(id) =>
-                    onChange(id !== "" ? parseInt(id) : null)
-                  }
+                  onSelectOption={(id) => {
+                    onChange(id !== "" ? parseInt(id) : null);
+                    updateQueryParams([
+                      {
+                        key: "endPerson",
+                        value: id,
+                      },
+                    ]);
+                  }}
                   value={value ? value.toString() : ""}
                   searchText={endPersonQueryText}
                   setSearchText={setEndPersonQueryText}
