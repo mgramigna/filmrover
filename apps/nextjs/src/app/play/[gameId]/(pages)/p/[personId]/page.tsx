@@ -41,7 +41,21 @@ export default function PersonDetailPage() {
     () =>
       credits?.crew
         .sort((a, b) => b.popularity - a.popularity)
-        .filter(({ media_type }) => media_type === "movie") ?? [],
+        .filter(
+          ({ media_type, department }) =>
+            media_type === "movie" && department !== "Directing",
+        ) ?? [],
+    [credits],
+  );
+
+  const directing = useMemo(
+    () =>
+      credits?.crew
+        .sort((a, b) => b.popularity - a.popularity)
+        .filter(
+          ({ media_type, department }) =>
+            media_type === "movie" && department === "Directing",
+        ) ?? [],
     [credits],
   );
 
@@ -77,39 +91,60 @@ export default function PersonDetailPage() {
           </div>
         )}
       </div>
-      <div className="mt-12 flex w-full justify-evenly">
-        {filteredCast.length > 0 && (
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            <div className="flex flex-col gap-2">
-              {filteredCast.map(({ credit_id, id, title }) => (
-                <div key={credit_id}>
-                  {title && (
+      <div className="mt-12 flex justify-center">
+        <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+          {directing.length > 0 && (
+            <div>
+              <h3 className="text-3xl font-extrabold tracking-tight">
+                Directing
+              </h3>
+              <div className="mt-8 flex flex-col gap-2">
+                {directing.map(({ id, title }) => (
+                  <div key={id}>
+                    {title && (
+                      <ClickableDetail
+                        href={`/play/${gameId}/m/${id}`}
+                        label={title}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {filteredCast.length > 0 && (
+            <div>
+              <h3 className="text-3xl font-extrabold tracking-tight">Acting</h3>
+              <div className="mt-8 flex flex-col gap-2">
+                {filteredCast.map(({ credit_id, id, title }) => (
+                  <div key={credit_id}>
+                    {title && (
+                      <ClickableDetail
+                        href={`/play/${gameId}/m/${id}`}
+                        label={title}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {filteredCrew.length > 0 && (
+            <div>
+              <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
+              <div className="mt-8 flex flex-col gap-2">
+                {filteredCrew.map(({ id, title, job }) => (
+                  <div key={`${id}-${job}`}>
                     <ClickableDetail
                       href={`/play/${gameId}/m/${id}`}
-                      label={title}
+                      label={`${title} (${job})`}
                     />
-                  )}
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {filteredCrew.length > 0 && (
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-            <div className="flex flex-col gap-2">
-              {filteredCrew.map(({ id, title, job }) => (
-                <div key={`${id}-${job}`}>
-                  <ClickableDetail
-                    href={`/play/${gameId}/m/${id}`}
-                    label={`${title} (${job})`}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

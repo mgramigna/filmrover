@@ -5,7 +5,9 @@ import "@/styles/globals.css";
 
 import { cache } from "react";
 import { headers } from "next/headers";
+import Link from "next/link";
 
+import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
 
 const fontSans = Inter({
@@ -35,9 +37,23 @@ const getHeaders = cache(() => Promise.resolve(headers()));
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={["font-sans", fontSans.variable].join(" ")}>
+      <body
+        className={cn([
+          "font-sans",
+          fontSans.variable,
+          "dark bg-gradient-to-b from-slate-800 to-slate-950 text-white",
+        ])}
+      >
         <TRPCReactProvider headersPromise={getHeaders()}>
-          <main className="dark flex h-screen flex-col items-center overflow-y-scroll bg-gradient-to-b from-slate-800 to-slate-950 text-white">
+          <nav className="flex h-12 items-center bg-slate-900">
+            <Link
+              href="/"
+              className="ml-4 text-xl font-extrabold tracking-tight"
+            >
+              FilmRover
+            </Link>
+          </nav>
+          <main className="flex h-[calc(100dvh-48px)] flex-col items-center overflow-y-scroll">
             {children}
           </main>
         </TRPCReactProvider>

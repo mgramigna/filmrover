@@ -74,32 +74,17 @@ export default function MovieDetailPage() {
           </div>
         )}
       </div>
-      <div className="mt-12 flex w-full justify-evenly gap-8">
-        <div>
-          <h3 className="text-3xl font-extrabold tracking-tight">
-            Director(s)
-          </h3>
-          <div className="flex flex-col gap-2">
-            {uniqueDirectors
-              .sort((a, b) => b.popularity - a.popularity)
-              .map(({ credit_id, name, id }) => (
-                <div key={credit_id}>
-                  <ClickableDetail
-                    href={`/play/${gameId}/p/${id}`}
-                    label={name}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
-        {credits && credits.cast.length > 0 && (
+      <div className="mt-12 flex justify-center">
+        <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            <div className="flex flex-col gap-2">
-              {credits?.cast
+            <h3 className="text-3xl font-extrabold tracking-tight">
+              Director(s)
+            </h3>
+            <div className="mt-8 flex flex-col gap-2">
+              {uniqueDirectors
                 .sort((a, b) => b.popularity - a.popularity)
-                .map(({ id, name }) => (
-                  <div key={id}>
+                .map(({ credit_id, name, id }) => (
+                  <div key={credit_id}>
                     <ClickableDetail
                       href={`/play/${gameId}/p/${id}`}
                       label={name}
@@ -108,20 +93,37 @@ export default function MovieDetailPage() {
                 ))}
             </div>
           </div>
-        )}
-        <div>
-          <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-          <div className="flex flex-col gap-2">
-            {uniqueCrew
-              .sort((a, b) => b.popularity - a.popularity)
-              .map(({ id, credit_id, name, job }) => (
-                <div key={credit_id}>
-                  <ClickableDetail
-                    href={`/play/${gameId}/p/${id}`}
-                    label={`${name} (${job})`}
-                  />
-                </div>
-              ))}
+          {credits && credits.cast.length > 0 && (
+            <div>
+              <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+              <div className="mt-8 flex flex-col gap-2">
+                {credits?.cast
+                  .sort((a, b) => b.popularity - a.popularity)
+                  .map(({ id, name }) => (
+                    <div key={id}>
+                      <ClickableDetail
+                        href={`/play/${gameId}/p/${id}`}
+                        label={name}
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
+            <div className="flex flex-col gap-2 pt-8">
+              {uniqueCrew
+                .sort((a, b) => b.popularity - a.popularity)
+                .map(({ id, credit_id, name, job }) => (
+                  <div key={credit_id}>
+                    <ClickableDetail
+                      href={`/play/${gameId}/p/${id}`}
+                      label={`${name} (${job})`}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
