@@ -26,9 +26,10 @@ export default function PersonDetailPage() {
       id: personId,
     });
 
-  const { data: credits } = api.person.getCredits.useQuery({
-    id: personId,
-  });
+  const { data: credits, isLoading: creditsLoading } =
+    api.person.getCredits.useQuery({
+      id: personId,
+    });
 
   const filteredCast = useMemo(
     () =>
@@ -70,13 +71,11 @@ export default function PersonDetailPage() {
 
   return (
     <div className="container mt-12 flex w-full flex-1 flex-col items-center">
-      {!personLoading && person && (
-        <div className="flex justify-center">
-          <h1 className="text-center text-5xl font-extrabold tracking-tight">
-            {person.name}
-          </h1>
-        </div>
-      )}
+      <div className="flex justify-center">
+        <h1 className="text-center text-5xl font-extrabold tracking-tight">
+          {person?.name}
+        </h1>
+      </div>
       <div className="mt-12 flex w-full justify-center gap-8">
         {personLoading && (
           <div>
@@ -90,15 +89,15 @@ export default function PersonDetailPage() {
           <ImagePlaceholder />
         )}
       </div>
-      <div className="mt-12 flex justify-center">
+      <div className="mt-12 flex justify-center md:w-full">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-          {directing.length > 0 && (
-            <div>
-              <h3 className="text-3xl font-extrabold tracking-tight">
-                Directing
-              </h3>
-              <div className="mt-8 flex flex-col gap-2">
-                {directing.map(({ id, title }) => (
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">
+              Directing
+            </h3>
+            <div className="mt-8 flex flex-col gap-2">
+              {directing.length > 0 ? (
+                directing.map(({ id, title }) => (
                   <div key={id}>
                     {title && (
                       <ClickableDetail
@@ -107,15 +106,17 @@ export default function PersonDetailPage() {
                       />
                     )}
                   </div>
-                ))}
-              </div>
+                ))
+              ) : !creditsLoading ? (
+                <div className="text-sm italic">None</div>
+              ) : null}
             </div>
-          )}
-          {filteredCast.length > 0 && (
-            <div>
-              <h3 className="text-3xl font-extrabold tracking-tight">Acting</h3>
-              <div className="mt-8 flex flex-col gap-2">
-                {filteredCast.map(({ credit_id, id, title }) => (
+          </div>
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+            <div className="mt-8 flex flex-col gap-2">
+              {filteredCast.length > 0 ? (
+                filteredCast.map(({ credit_id, id, title }) => (
                   <div key={credit_id}>
                     {title && (
                       <ClickableDetail
@@ -124,25 +125,29 @@ export default function PersonDetailPage() {
                       />
                     )}
                   </div>
-                ))}
-              </div>
+                ))
+              ) : !creditsLoading ? (
+                <div className="text-sm italic">None</div>
+              ) : null}
             </div>
-          )}
-          {filteredCrew.length > 0 && (
-            <div>
-              <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-              <div className="mt-8 flex flex-col gap-2">
-                {filteredCrew.map(({ id, title, job }) => (
+          </div>
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
+            <div className="mt-8 flex flex-col gap-2">
+              {filteredCrew.length > 0 ? (
+                filteredCrew.map(({ id, title, job }) => (
                   <div key={`${id}-${job}`}>
                     <ClickableDetail
                       href={`/play/${gameId}/m/${id}`}
                       label={`${title} (${job})`}
                     />
                   </div>
-                ))}
-              </div>
+                ))
+              ) : !creditsLoading ? (
+                <div className="text-sm italic">None</div>
+              ) : null}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

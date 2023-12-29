@@ -48,18 +48,11 @@ export default function MovieDetailPage() {
 
   return (
     <div className="container mt-12 flex w-full flex-1 flex-col items-center">
-      {movieLoading && (
-        <div>
-          <Skeleton className="h-10 w-[400px] bg-slate-500" />
-        </div>
-      )}
-      {!movieLoading && movie && (
-        <div className="flex justify-center">
-          <h1 className="text-center text-5xl font-extrabold tracking-tight">
-            {movie.title}
-          </h1>
-        </div>
-      )}
+      <div className="flex justify-center">
+        <h1 className="text-center text-5xl font-extrabold tracking-tight">
+          {movie?.title}
+        </h1>
+      </div>
       <div className="mt-12 flex w-full justify-center gap-8">
         {movieLoading && (
           <div>
@@ -71,11 +64,11 @@ export default function MovieDetailPage() {
         )}
         {!movieLoading && movie && !movie.poster_path && <ImagePlaceholder />}
       </div>
-      <div className="mt-12 flex justify-center">
-        <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 flex justify-center sm:w-full">
+        <div className="grid grid-cols-1 gap-12 md:w-full md:grid-cols-2 lg:grid-cols-3">
           <div>
             <h3 className="text-3xl font-extrabold tracking-tight">
-              Director(s)
+              Directing
             </h3>
             <div className="mt-8 flex flex-col gap-2">
               {uniqueDirectors
@@ -90,23 +83,21 @@ export default function MovieDetailPage() {
                 ))}
             </div>
           </div>
-          {credits && credits.cast.length > 0 && (
-            <div>
-              <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-              <div className="mt-8 flex flex-col gap-2">
-                {credits?.cast
-                  .sort((a, b) => b.popularity - a.popularity)
-                  .map(({ id, name }) => (
-                    <div key={id}>
-                      <ClickableDetail
-                        href={`/play/${gameId}/p/${id}`}
-                        label={name}
-                      />
-                    </div>
-                  ))}
-              </div>
+          <div>
+            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
+            <div className="mt-8 flex flex-col gap-2">
+              {credits?.cast
+                .sort((a, b) => b.popularity - a.popularity)
+                .map(({ id, name }) => (
+                  <div key={id}>
+                    <ClickableDetail
+                      href={`/play/${gameId}/p/${id}`}
+                      label={name}
+                    />
+                  </div>
+                ))}
             </div>
-          )}
+          </div>
           <div>
             <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
             <div className="flex flex-col gap-2 pt-8">
