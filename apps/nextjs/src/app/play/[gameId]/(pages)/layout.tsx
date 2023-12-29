@@ -46,8 +46,10 @@ export default function PageLayout({
         </div>
         {endMovie && (
           <div className="flex w-1/3 justify-center text-xs sm:text-base">
-            Navigate to{" "}
-            <span className="font-bold">&quot;{endMovie.title}&quot;</span>
+            <div>
+              Navigate to{" "}
+              <span className="font-bold">&quot;{endMovie.title}&quot;</span>
+            </div>
           </div>
         )}
         {endPerson && (

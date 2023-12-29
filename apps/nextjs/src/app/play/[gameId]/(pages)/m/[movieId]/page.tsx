@@ -29,7 +29,7 @@ export default function MovieDetailPage() {
   });
 
   if (gameLoading) {
-    return null;
+    return <div className="flex flex-1 flex-col" />;
   }
 
   const directors = credits?.crew.filter(({ job }) => job === "Director") ?? [];

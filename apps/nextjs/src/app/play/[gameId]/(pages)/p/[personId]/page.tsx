@@ -61,7 +61,7 @@ export default function PersonDetailPage() {
   );
 
   if (gameLoading) {
-    return null;
+    return <div className="flex flex-1 flex-col" />;
   }
 
   if (personId === game?.endPersonId) {
