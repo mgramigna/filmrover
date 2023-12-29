@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Autocomplete } from "@/components/ui/autocomplete";
@@ -645,7 +646,22 @@ export const CreateGameForm = ({
       <div className="mt-12">
         <h2 className="text-4xl font-bold">Step 3: Have fun!</h2>
       </div>
-      <div className="mt-12 pb-24">
+      <div className="mt-12 flex gap-4 pb-24">
+        <Button
+          variant="ghost"
+          onClick={() => {
+            navigator.clipboard
+              .writeText(window.location.href)
+              .then(() => {
+                toast("Copied game link to clipboard!");
+              })
+              .catch(() => {
+                toast("Something went wrong");
+              });
+          }}
+        >
+          Copy Game Link
+        </Button>
         <Button disabled={!isValid} onClick={handleSubmit(onSubmit)}>
           Continue
         </Button>

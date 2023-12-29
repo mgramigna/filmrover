@@ -3,6 +3,7 @@
 import type { CreateGameFormType } from "@/components/forms/CreateGameForm";
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { CreateGameForm } from "@/components/forms/CreateGameForm";
 import { api } from "@/trpc/react";
@@ -15,7 +16,7 @@ export default function CreateGamePage() {
       router.push(`/play/${gameId}`);
     },
     onError: () => {
-      alert("Something went wrong");
+      toast("Something went wrong");
     },
   });
 

@@ -72,38 +72,32 @@ export default function GameIdPage() {
 
   return (
     <div className="container mt-12 flex flex-col items-center">
-      <div className="flex w-full items-center justify-evenly">
+      <h1 className="text-5xl font-extrabold tracking-tight">Your Game</h1>
+      <div className="mt-12 flex w-full items-center justify-evenly">
         {startMovie?.poster_path && (
-          <TMDBImage
-            slug={startMovie.poster_path}
-            title={startMovie.title}
-            priority
-          />
+          <TMDBImage slug={startMovie.poster_path} priority />
         )}
         {startPerson?.profile_path && (
-          <TMDBImage
-            slug={startPerson.profile_path}
-            title={startPerson.name}
-            priority
-          />
+          <TMDBImage slug={startPerson.profile_path} priority />
         )}
         <div className="h-10 w-10">
           <ArrowRight className="h-full w-full" />
         </div>
         {endMovie?.poster_path && (
-          <TMDBImage
-            slug={endMovie.poster_path}
-            title={endMovie.title}
-            priority
-          />
+          <TMDBImage slug={endMovie.poster_path} priority />
         )}
         {endPerson?.profile_path && (
-          <TMDBImage
-            slug={endPerson.profile_path}
-            title={endPerson.name}
-            priority
-          />
+          <TMDBImage slug={endPerson.profile_path} priority />
         )}
+      </div>
+      <div className="mt-12 text-center text-xl">
+        Navigate from{" "}
+        <span className="font-bold">
+          {startMovie?.title ?? startPerson?.name}
+        </span>{" "}
+        to{" "}
+        <span className="font-bold">{endMovie?.title ?? endPerson?.name}</span>{" "}
+        as quickly as possible by clicking links on each page
       </div>
       <div className="mt-12 flex gap-4">
         <Link href="/play">

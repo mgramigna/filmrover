@@ -43,7 +43,7 @@ export default function MovieDetailPage() {
   ];
 
   if (movieId === game?.endMovieId) {
-    return <VictoryPage gameId={gameId} movie={movie} />;
+    return <VictoryPage game={game} gameId={gameId} movie={movie} />;
   }
 
   return (

@@ -7,6 +7,7 @@ import { cache } from "react";
 import { headers } from "next/headers";
 import Link from "next/link";
 
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
 
@@ -56,6 +57,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <main className="flex h-[calc(100dvh-48px)] flex-col items-center overflow-y-scroll">
             {children}
           </main>
+          <Toaster />
         </TRPCReactProvider>
       </body>
     </html>

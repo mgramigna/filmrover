@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import type { RouterOutputs } from "@filmrover/api";
 
@@ -11,11 +12,13 @@ import { TMDBImage } from "./TMDBImage";
 import { Button } from "./ui/button";
 
 export const VictoryPage = ({
+  game,
   gameId,
   person,
   movie,
 }: {
   gameId: string;
+  game?: RouterOutputs["game"]["getById"];
   person?: RouterOutputs["person"]["getById"];
   movie?: RouterOutputs["movie"]["getById"];
 }) => {
@@ -27,7 +30,7 @@ export const VictoryPage = ({
       await utils.game.getById.invalidate();
     },
     onError: () => {
-      alert("Something went wrong");
+      toast("Something went wrong");
     },
   });
 
@@ -64,9 +67,68 @@ export const VictoryPage = ({
         <div className="text-center text-3xl font-bold tracking-tight">
           {formatTimer(time)}
         </div>
-        <Link href="/play">
-          <Button>New Game</Button>
-        </Link>
+        <div className="mt-12 flex gap-4">
+          <Button
+            variant="ghost"
+            disabled={!game}
+            onClick={() => {
+              const start = {
+                type:
+                  game!.startMovieId != null
+                    ? ("movie" as const)
+                    : ("person" as const),
+                id:
+                  game!.startMovieId != null
+                    ? game!.startMovieId
+                    : game!.startPersonId!,
+              };
+
+              const end = {
+                type:
+                  game!.endMovieId != null
+                    ? ("movie" as const)
+                    : ("person" as const),
+                id:
+                  game!.endMovieId != null
+                    ? game!.endMovieId
+                    : game!.endPersonId!,
+              };
+
+              const params = new URLSearchParams({
+                ...(start.type === "movie"
+                  ? {
+                      startMovie: start.id.toString(),
+                    }
+                  : {
+                      startPerson: start.id.toString(),
+                    }),
+                ...(end.type === "movie"
+                  ? {
+                      endMovie: end.id.toString(),
+                    }
+                  : {
+                      endPerson: end.id.toString(),
+                    }),
+              });
+
+              navigator.clipboard
+                .writeText(
+                  `${window.location.origin}/play?${params.toString()}`,
+                )
+                .then(() => {
+                  toast("Copied game link to clipboard!");
+                })
+                .catch(() => {
+                  toast("Something went wrong");
+                });
+            }}
+          >
+            Copy Game Link
+          </Button>
+          <Link href="/play">
+            <Button>New Game</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

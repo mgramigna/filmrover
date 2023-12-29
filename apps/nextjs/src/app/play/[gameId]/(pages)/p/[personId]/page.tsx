@@ -66,7 +66,7 @@ export default function PersonDetailPage() {
   }
 
   if (personId === game?.endPersonId) {
-    return <VictoryPage gameId={gameId} person={person} />;
+    return <VictoryPage game={game} gameId={gameId} person={person} />;
   }
 
   return (
