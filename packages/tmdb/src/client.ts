@@ -143,4 +143,36 @@ export class TMDBClient {
 
     return result;
   }
+
+  async searchPopularMovies({
+    page = 1,
+  }: {
+    page?: number;
+  }): Promise<Result<MovieSearchResult, Error>> {
+    const result = await this.fetch({
+      schema: MovieSearchResultSchema,
+      path: "/movie/popular",
+      query: new URLSearchParams({
+        page: page.toString(),
+      }).toString(),
+    });
+
+    return result;
+  }
+
+  async searchPopularPeople({
+    page = 1,
+  }: {
+    page?: number;
+  }): Promise<Result<PersonSearchResult, Error>> {
+    const result = await this.fetch({
+      schema: PersonSearchResultSchema,
+      path: "/person/popular",
+      query: new URLSearchParams({
+        page: page.toString(),
+      }).toString(),
+    });
+
+    return result;
+  }
 }

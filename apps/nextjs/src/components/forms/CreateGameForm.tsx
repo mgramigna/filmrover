@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
@@ -8,6 +8,8 @@ import { Autocomplete } from "@/components/ui/autocomplete";
 import { Button } from "@/components/ui/button";
 import { useDebouncedSearch } from "@/hooks/useDebounce";
 import { api } from "@/trpc/react";
+import { ImagePlaceholder } from "../ImagePlaceholder";
+import { TMDBImage } from "../TMDBImage";
 
 const CreateGameFormSchema = z.union([
   z.object({
@@ -127,6 +129,9 @@ export const CreateGameForm = ({
       },
     );
 
+  const { data: popularMovies } = api.movie.getPopularList.useQuery({});
+  const { data: popularPeople } = api.person.getPopularList.useQuery({});
+
   useEffect(() => {
     const newResults =
       startMovies?.results
@@ -135,14 +140,6 @@ export const CreateGameForm = ({
           value: id.toString(),
           label: `${title} (${dayjs(release_date).format("YYYY")})`,
         })) ?? [];
-
-    if (
-      !newResults.some(
-        (result) => result.value === currentStartMovieId?.toString(),
-      )
-    ) {
-      setValue("startMovieId", undefined);
-    }
 
     setStartMovieOptions(newResults);
   }, [currentStartMovieId, setValue, startMovies]);
@@ -153,14 +150,6 @@ export const CreateGameForm = ({
         value: id.toString(),
         label: name,
       })) ?? [];
-
-    if (
-      !newResults.some(
-        (result) => result.value === currentStartPersonId?.toString(),
-      )
-    ) {
-      setValue("startPersonId", undefined);
-    }
 
     setStartPersonOptions(newResults);
   }, [currentStartPersonId, setValue, startPeople]);
@@ -174,14 +163,6 @@ export const CreateGameForm = ({
           label: `${title} (${dayjs(release_date).format("YYYY")})`,
         })) ?? [];
 
-    if (
-      !newResults.some(
-        (result) => result.value === currentEndMovieId?.toString(),
-      )
-    ) {
-      setValue("endMovieId", undefined);
-    }
-
     setEndMovieOptions(newResults);
   }, [currentEndMovieId, setValue, endMovies]);
 
@@ -192,110 +173,317 @@ export const CreateGameForm = ({
         label: name,
       })) ?? [];
 
-    if (
-      !newResults.some(
-        (result) => result.value === currentEndPersonId?.toString(),
-      )
-    ) {
-      setValue("endPersonId", undefined);
-    }
-
     setEndPersonOptions(newResults);
   }, [endPeople, currentEndPersonId, setValue]);
+
+  const clearStart = useCallback(() => {
+    setValue("startMovieId", undefined, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setValue("startPersonId", undefined, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [setValue]);
+
+  const clearEnd = useCallback(() => {
+    setValue("endMovieId", undefined, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setValue("endPersonId", undefined, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [setValue]);
+
+  const { data: selectedStartMovie } = api.movie.getById.useQuery(
+    {
+      id: currentStartMovieId!,
+    },
+    {
+      enabled: currentStartMovieId != null,
+    },
+  );
+
+  const { data: selectedStartPerson } = api.person.getById.useQuery(
+    {
+      id: currentStartPersonId!,
+    },
+    {
+      enabled: currentStartPersonId != null,
+    },
+  );
+
+  const { data: selectedEndMovie } = api.movie.getById.useQuery(
+    {
+      id: currentEndMovieId!,
+    },
+    {
+      enabled: currentEndMovieId != null,
+    },
+  );
+
+  const { data: selectedEndPerson } = api.person.getById.useQuery(
+    {
+      id: currentEndPersonId!,
+    },
+    {
+      enabled: currentEndPersonId != null,
+    },
+  );
+
+  const selectRandomStart = useCallback(() => {
+    if (!(popularMovies && popularPeople)) return;
+
+    const randomStartType = Math.random() < 0.5 ? "movie" : "person";
+
+    const randomArray =
+      randomStartType === "movie"
+        ? popularMovies.results
+        : popularPeople.results;
+
+    const randomChoice =
+      randomArray[Math.floor(Math.random() * randomArray.length)];
+
+    if (randomStartType === "movie") {
+      setValue("startMovieId", randomChoice?.id, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue("startPersonId", undefined, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } else {
+      setValue("startMovieId", undefined, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue("startPersonId", randomChoice?.id, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [popularMovies, popularPeople, setValue]);
+
+  const selectRandomEnd = useCallback(() => {
+    if (!(popularMovies && popularPeople)) return;
+
+    const randomEndType = Math.random() < 0.5 ? "movie" : "person";
+
+    const randomArray =
+      randomEndType === "movie" ? popularMovies.results : popularPeople.results;
+
+    const randomChoice =
+      randomArray[Math.floor(Math.random() * randomArray.length)];
+
+    if (randomEndType === "movie") {
+      setValue("endMovieId", randomChoice?.id, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue("endPersonId", undefined, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } else {
+      setValue("endMovieId", undefined, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue("endPersonId", randomChoice?.id, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [popularMovies, popularPeople, setValue]);
 
   return (
     <div className="container flex flex-col items-center">
       <div className="mt-12">
-        <Controller
-          control={control}
-          name="startMovieId"
-          render={({ field: { value, onChange } }) => (
-            <Autocomplete
-              open={startMovieOpen}
-              setOpen={setStartMovieOpen}
-              onSelectOption={(id) => onChange(id !== "" ? parseInt(id) : null)}
-              value={value ? value.toString() : ""}
-              searchText={startMovieQueryText}
-              setSearchText={setStartMovieQueryText}
-              options={startMovieOptions}
-              searchPlaceholder="Search for movie titles..."
-              selectionPlaceholder="Select starting movie"
-              isLoading={startMoviesLoading}
-              emptyResultsText="No movies found"
-              disabled={!!getValues("startPersonId")}
+        <h2 className="text-4xl font-bold">Step 1. Choose a starting point</h2>
+      </div>
+      <div className="mt-12 flex flex-wrap justify-center gap-y-8 sm:flex-nowrap sm:justify-between">
+        <div className="flex flex-col justify-center gap-8">
+          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+            <Controller
+              control={control}
+              name="startMovieId"
+              render={({ field: { value, onChange } }) => (
+                <Autocomplete
+                  open={startMovieOpen}
+                  setOpen={setStartMovieOpen}
+                  onSelectOption={(id) =>
+                    onChange(id !== "" ? parseInt(id) : null)
+                  }
+                  value={value ? value.toString() : ""}
+                  searchText={startMovieQueryText}
+                  setSearchText={setStartMovieQueryText}
+                  options={startMovieOptions}
+                  searchPlaceholder="Search for movie titles..."
+                  selectionPlaceholder="Select starting movie"
+                  isLoading={startMoviesLoading}
+                  emptyResultsText="No movies found"
+                  disabled={!!getValues("startPersonId")}
+                />
+              )}
             />
-          )}
-        />
+          </div>
+          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+            <Controller
+              control={control}
+              name="startPersonId"
+              render={({ field: { value, onChange } }) => (
+                <Autocomplete
+                  open={startPersonOpen}
+                  setOpen={setStartPersonOpen}
+                  onSelectOption={(id) =>
+                    onChange(id !== "" ? parseInt(id) : null)
+                  }
+                  value={value ? value.toString() : ""}
+                  searchText={startPersonQueryText}
+                  setSearchText={setStartPersonQueryText}
+                  options={startPersonOptions}
+                  searchPlaceholder="Search by name..."
+                  selectionPlaceholder="Select starting actor/director/writer/etc."
+                  isLoading={startPeopleLoading}
+                  emptyResultsText="No people found"
+                  disabled={!!getValues("startMovieId")}
+                />
+              )}
+            />
+          </div>
+        </div>
+        {!selectedStartMovie && !selectedStartPerson && (
+          <ImagePlaceholder size="sm" noText />
+        )}
+        {selectedStartMovie?.poster_path ? (
+          <TMDBImage
+            slug={selectedStartMovie.poster_path}
+            title={selectedStartMovie.title}
+            size="sm"
+          />
+        ) : selectedStartMovie ? (
+          <ImagePlaceholder size="sm" />
+        ) : null}
+        {selectedStartPerson?.profile_path ? (
+          <TMDBImage
+            slug={selectedStartPerson.profile_path}
+            title={selectedStartPerson.name}
+            size="sm"
+          />
+        ) : selectedStartPerson ? (
+          <ImagePlaceholder size="sm" />
+        ) : null}
+      </div>
+      <div className="mt-6 flex gap-4">
+        <Button variant="ghost" onClick={clearStart}>
+          Clear
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={selectRandomStart}
+          disabled={!(popularMovies && popularPeople)}
+        >
+          Choose For Me
+        </Button>
       </div>
       <div className="mt-12">
-        <Controller
-          control={control}
-          name="startPersonId"
-          render={({ field: { value, onChange } }) => (
-            <Autocomplete
-              open={startPersonOpen}
-              setOpen={setStartPersonOpen}
-              onSelectOption={(id) => onChange(id !== "" ? parseInt(id) : null)}
-              value={value ? value.toString() : ""}
-              searchText={startPersonQueryText}
-              setSearchText={setStartPersonQueryText}
-              options={startPersonOptions}
-              searchPlaceholder="Search by name..."
-              selectionPlaceholder="Select starting actor/director/writer/etc."
-              isLoading={startPeopleLoading}
-              emptyResultsText="No people found"
-              disabled={!!getValues("startMovieId")}
+        <h2 className="text-4xl font-bold">Step 2. Choose a destination</h2>
+      </div>
+      <div className="mt-12 flex flex-wrap justify-center gap-y-8 sm:flex-nowrap sm:justify-between">
+        <div className="flex flex-col justify-center gap-8">
+          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+            <Controller
+              control={control}
+              name="endMovieId"
+              render={({ field: { value, onChange } }) => (
+                <Autocomplete
+                  open={endMovieOpen}
+                  setOpen={setEndMovieOpen}
+                  onSelectOption={(id) =>
+                    onChange(id !== "" ? parseInt(id) : null)
+                  }
+                  value={value ? value.toString() : ""}
+                  searchText={endMovieQueryText}
+                  setSearchText={setEndMovieQueryText}
+                  options={endMovieOptions}
+                  searchPlaceholder="Search for movie titles..."
+                  selectionPlaceholder="Select ending movie"
+                  isLoading={endMoviesLoading}
+                  emptyResultsText="No movies found"
+                  disabled={!!getValues("endPersonId")}
+                />
+              )}
             />
-          )}
-        />
+          </div>
+          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+            <Controller
+              control={control}
+              name="endPersonId"
+              render={({ field: { value, onChange } }) => (
+                <Autocomplete
+                  open={endPersonOpen}
+                  setOpen={setEndPersonOpen}
+                  onSelectOption={(id) =>
+                    onChange(id !== "" ? parseInt(id) : null)
+                  }
+                  value={value ? value.toString() : ""}
+                  searchText={endPersonQueryText}
+                  setSearchText={setEndPersonQueryText}
+                  options={endPersonOptions}
+                  searchPlaceholder="Search by name..."
+                  selectionPlaceholder="Select ending actor/director/writer/etc."
+                  isLoading={endPeopleLoading}
+                  emptyResultsText="No people found"
+                  disabled={!!getValues("endMovieId")}
+                />
+              )}
+            />
+          </div>
+        </div>
+        {!selectedEndMovie && !selectedEndPerson && (
+          <ImagePlaceholder size="sm" noText />
+        )}
+        {selectedEndMovie?.poster_path ? (
+          <TMDBImage
+            slug={selectedEndMovie.poster_path}
+            title={selectedEndMovie.title}
+            size="sm"
+          />
+        ) : selectedEndMovie ? (
+          <ImagePlaceholder size="sm" />
+        ) : null}
+        {selectedEndPerson?.profile_path ? (
+          <TMDBImage
+            slug={selectedEndPerson.profile_path}
+            title={selectedEndPerson.name}
+            size="sm"
+          />
+        ) : selectedEndPerson ? (
+          <ImagePlaceholder size="sm" />
+        ) : null}
+      </div>
+      <div className="mt-6 flex gap-4">
+        <Button variant="ghost" onClick={clearEnd}>
+          Clear
+        </Button>
+        <Button
+          variant="secondary"
+          disabled={!(popularMovies && popularPeople)}
+          onClick={selectRandomEnd}
+        >
+          Choose For Me
+        </Button>
       </div>
       <div className="mt-12">
-        <Controller
-          control={control}
-          name="endMovieId"
-          render={({ field: { value, onChange } }) => (
-            <Autocomplete
-              open={endMovieOpen}
-              setOpen={setEndMovieOpen}
-              onSelectOption={(id) => onChange(id !== "" ? parseInt(id) : null)}
-              value={value ? value.toString() : ""}
-              searchText={endMovieQueryText}
-              setSearchText={setEndMovieQueryText}
-              options={endMovieOptions}
-              searchPlaceholder="Search for movie titles..."
-              selectionPlaceholder="Select ending movie"
-              isLoading={endMoviesLoading}
-              emptyResultsText="No movies found"
-              disabled={!!getValues("endPersonId")}
-            />
-          )}
-        />
+        <h2 className="text-4xl font-bold">Step 3. Have fun!</h2>
       </div>
-      <div className="mt-12">
-        <Controller
-          control={control}
-          name="endPersonId"
-          render={({ field: { value, onChange } }) => (
-            <Autocomplete
-              open={endPersonOpen}
-              setOpen={setEndPersonOpen}
-              onSelectOption={(id) => onChange(id !== "" ? parseInt(id) : null)}
-              value={value ? value.toString() : ""}
-              searchText={endPersonQueryText}
-              setSearchText={setEndPersonQueryText}
-              options={endPersonOptions}
-              searchPlaceholder="Search by name..."
-              selectionPlaceholder="Select ending actor/director/writer/etc."
-              isLoading={endPeopleLoading}
-              emptyResultsText="No people found"
-              disabled={!!getValues("endMovieId")}
-            />
-          )}
-        />
-      </div>
-      <div className="mt-12">
+      <div className="mt-12 pb-24">
         <Button disabled={!isValid} onClick={handleSubmit(onSubmit)}>
-          Start
+          Continue
         </Button>
       </div>
     </div>

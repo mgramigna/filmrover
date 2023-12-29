@@ -68,4 +68,25 @@ export const movieRouter = createTRPCRouter({
 
       return result.value;
     }),
+  getPopularList: publicProcedure
+    .input(
+      z.object({
+        page: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.tmdb.searchPopularMovies({
+        page: input.page,
+      });
+
+      if (result.isErr()) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: result.error.message,
+          cause: result.error,
+        });
+      }
+
+      return result.value;
+    }),
 });
