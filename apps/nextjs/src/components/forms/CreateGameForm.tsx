@@ -303,11 +303,11 @@ export const CreateGameForm = ({
   return (
     <div className="container flex flex-col items-center">
       <div className="mt-12">
-        <h2 className="text-4xl font-bold">Step 1. Choose a starting point</h2>
+        <h2 className="text-4xl font-bold">Step 1: Choose a starting point</h2>
       </div>
-      <div className="mt-12 flex flex-wrap justify-center gap-y-8 sm:flex-nowrap sm:justify-between">
+      <div className="mt-12 flex flex-wrap justify-center gap-8 sm:w-[600px] sm:flex-nowrap">
         <div className="flex flex-col justify-center gap-8">
-          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+          <div className="flex justify-center sm:justify-start">
             <Controller
               control={control}
               name="startMovieId"
@@ -331,7 +331,7 @@ export const CreateGameForm = ({
               )}
             />
           </div>
-          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+          <div className="flex justify-center sm:justify-start">
             <Controller
               control={control}
               name="startPersonId"
@@ -360,23 +360,22 @@ export const CreateGameForm = ({
           <ImagePlaceholder size="sm" noText />
         )}
         {selectedStartMovie?.poster_path ? (
-          <TMDBImage
-            slug={selectedStartMovie.poster_path}
-            title={selectedStartMovie.title}
-            size="sm"
-          />
+          <TMDBImage slug={selectedStartMovie.poster_path} size="sm" />
         ) : selectedStartMovie ? (
           <ImagePlaceholder size="sm" />
         ) : null}
         {selectedStartPerson?.profile_path ? (
-          <TMDBImage
-            slug={selectedStartPerson.profile_path}
-            title={selectedStartPerson.name}
-            size="sm"
-          />
+          <TMDBImage slug={selectedStartPerson.profile_path} size="sm" />
         ) : selectedStartPerson ? (
           <ImagePlaceholder size="sm" />
         ) : null}
+      </div>
+      <div className="mt-4 text-xl sm:text-2xl">
+        {selectedStartMovie
+          ? selectedStartMovie.title
+          : selectedStartPerson
+            ? selectedStartPerson.name
+            : null}
       </div>
       <div className="mt-6 flex gap-4">
         <Button variant="ghost" onClick={clearStart}>
@@ -391,11 +390,11 @@ export const CreateGameForm = ({
         </Button>
       </div>
       <div className="mt-12">
-        <h2 className="text-4xl font-bold">Step 2. Choose a destination</h2>
+        <h2 className="text-4xl font-bold">Step 2: Choose a destination</h2>
       </div>
-      <div className="mt-12 flex flex-wrap justify-center gap-y-8 sm:flex-nowrap sm:justify-between">
+      <div className="mt-12 flex flex-wrap justify-center gap-8 sm:w-[600px] sm:flex-nowrap">
         <div className="flex flex-col justify-center gap-8">
-          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+          <div className="flex justify-center sm:justify-start">
             <Controller
               control={control}
               name="endMovieId"
@@ -419,7 +418,7 @@ export const CreateGameForm = ({
               )}
             />
           </div>
-          <div className="flex w-full justify-center sm:w-[500px] sm:justify-start">
+          <div className="flex justify-center sm:justify-start">
             <Controller
               control={control}
               name="endPersonId"
@@ -448,23 +447,22 @@ export const CreateGameForm = ({
           <ImagePlaceholder size="sm" noText />
         )}
         {selectedEndMovie?.poster_path ? (
-          <TMDBImage
-            slug={selectedEndMovie.poster_path}
-            title={selectedEndMovie.title}
-            size="sm"
-          />
+          <TMDBImage slug={selectedEndMovie.poster_path} size="sm" />
         ) : selectedEndMovie ? (
           <ImagePlaceholder size="sm" />
         ) : null}
         {selectedEndPerson?.profile_path ? (
-          <TMDBImage
-            slug={selectedEndPerson.profile_path}
-            title={selectedEndPerson.name}
-            size="sm"
-          />
+          <TMDBImage slug={selectedEndPerson.profile_path} size="sm" />
         ) : selectedEndPerson ? (
           <ImagePlaceholder size="sm" />
         ) : null}
+      </div>
+      <div className="mt-4 text-xl sm:text-2xl">
+        {selectedEndMovie
+          ? selectedEndMovie.title
+          : selectedEndPerson
+            ? selectedEndPerson.name
+            : null}
       </div>
       <div className="mt-6 flex gap-4">
         <Button variant="ghost" onClick={clearEnd}>
@@ -479,7 +477,7 @@ export const CreateGameForm = ({
         </Button>
       </div>
       <div className="mt-12">
-        <h2 className="text-4xl font-bold">Step 3. Have fun!</h2>
+        <h2 className="text-4xl font-bold">Step 3: Have fun!</h2>
       </div>
       <div className="mt-12 pb-24">
         <Button disabled={!isValid} onClick={handleSubmit(onSubmit)}>

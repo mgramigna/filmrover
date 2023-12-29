@@ -30,7 +30,7 @@ export const TMDBImage = ({
         className={cn(
           "relative  flex-1 rounded-lg border border-slate-100",
           size === "default" && "h-[150px] w-[100px] sm:h-[300px] sm:w-[200px]",
-          size === "sm" && "h-[75px] w-[50px] sm:h-[150px] sm:w-[100px]",
+          size === "sm" && "h-[150px] w-[100px]",
         )}
       >
         <Image

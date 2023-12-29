@@ -49,17 +49,19 @@ export const Autocomplete = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[400px] justify-between"
+          className="w-[300px] justify-between sm:w-[400px]"
           disabled={disabled}
         >
-          {value
-            ? options.find((option) => option.value === value)?.label ??
-              selectionPlaceholder
-            : selectionPlaceholder}
+          <span className="overflow-hidden text-ellipsis">
+            {value
+              ? options.find((option) => option.value === value)?.label ??
+                selectionPlaceholder
+              : selectionPlaceholder}
+          </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] rounded-lg">
+      <PopoverContent className="w-[300px] rounded-lg sm:w-[400px]">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={searchPlaceholder}
