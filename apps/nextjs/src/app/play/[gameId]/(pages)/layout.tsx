@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { useTimer } from "@/context/TimerContext";
+import { formatTimer } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
 export default function PageLayout({
@@ -40,11 +40,10 @@ export default function PageLayout({
   return (
     <>
       {children}
-      <div className="sticky bottom-0 z-50 flex h-24 w-full items-center justify-between gap-4 bg-slate-900 p-4">
+      <div className="sticky bottom-0 z-50 flex h-16 w-full items-center gap-4 bg-slate-900 p-4">
         <div className="flex w-1/3 justify-start rounded-xl text-xs sm:text-base">
-          {dayjs().startOf("day").millisecond(time).format("mm:ss.SSS")}
+          {formatTimer(time)}
         </div>
-        <div></div>
         {endMovie && (
           <div className="flex w-1/3 justify-center text-xs sm:text-base">
             Navigate to{" "}

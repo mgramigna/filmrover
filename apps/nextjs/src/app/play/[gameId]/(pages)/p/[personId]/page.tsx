@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 import { ClickableDetail } from "@/components/ClickableDetail";
+import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { TMDBImage } from "@/components/TMDBImage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
@@ -64,7 +65,7 @@ export default function PersonDetailPage() {
   }
 
   if (personId === game?.endPersonId) {
-    return <VictoryPage gameId={gameId} />;
+    return <VictoryPage gameId={gameId} person={person} />;
   }
 
   return (
@@ -86,9 +87,7 @@ export default function PersonDetailPage() {
           <TMDBImage slug={person.profile_path} priority />
         )}
         {!personLoading && person && !person.profile_path && (
-          <div className="flex h-[150px] w-[100px] rounded-lg border border-slate-100 bg-slate-700 sm:h-[300px] sm:w-[200px]">
-            <div className="m-auto">No Image</div>
-          </div>
+          <ImagePlaceholder />
         )}
       </div>
       <div className="mt-12 flex justify-center">

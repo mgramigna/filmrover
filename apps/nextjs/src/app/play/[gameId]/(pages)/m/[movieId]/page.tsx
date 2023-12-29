@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 
 import { ClickableDetail } from "@/components/ClickableDetail";
+import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { TMDBImage } from "@/components/TMDBImage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { VictoryPage } from "@/components/VictoryPage";
@@ -42,7 +43,7 @@ export default function MovieDetailPage() {
   ];
 
   if (movieId === game?.endMovieId) {
-    return <VictoryPage gameId={gameId} />;
+    return <VictoryPage gameId={gameId} movie={movie} />;
   }
 
   return (
@@ -68,11 +69,7 @@ export default function MovieDetailPage() {
         {!movieLoading && movie?.poster_path && (
           <TMDBImage slug={movie.poster_path} priority />
         )}
-        {!movieLoading && movie && !movie.poster_path && (
-          <div className="flex h-[150px] w-[100px] rounded-lg border border-slate-100 bg-slate-700 sm:h-[300px] sm:w-[200px]">
-            <div className="m-auto">No Image</div>
-          </div>
-        )}
+        {!movieLoading && movie && !movie.poster_path && <ImagePlaceholder />}
       </div>
       <div className="mt-12 flex justify-center">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
