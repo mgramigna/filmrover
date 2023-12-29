@@ -105,30 +105,35 @@ export default function GameIdPage() {
           />
         )}
       </div>
-      {startMovieId && (
-        <div className="mt-12">
-          <Button
-            onClick={() => {
-              start();
-              router.push(`/play/${gameId}/m/${startMovieId}`);
-            }}
-          >
-            Start Game
-          </Button>
-        </div>
-      )}
-      {startPersonId && (
-        <div className="mt-12">
-          <Button
-            onClick={() => {
-              start();
-              router.push(`/play/${gameId}/p/${startPersonId}`);
-            }}
-          >
-            Start Game
-          </Button>
-        </div>
-      )}
+      <div className="mt-12 flex gap-4">
+        <Link href="/play">
+          <Button variant="ghost">Start Over</Button>
+        </Link>
+        {startMovieId && (
+          <div>
+            <Button
+              onClick={() => {
+                start();
+                router.push(`/play/${gameId}/m/${startMovieId}`);
+              }}
+            >
+              Start Game
+            </Button>
+          </div>
+        )}
+        {startPersonId && (
+          <div>
+            <Button
+              onClick={() => {
+                start();
+                router.push(`/play/${gameId}/p/${startPersonId}`);
+              }}
+            >
+              Start Game
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

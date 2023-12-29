@@ -47,7 +47,7 @@ export default function MovieDetailPage() {
   }
 
   return (
-    <div className="container mt-12 flex w-full flex-col items-center">
+    <div className="container mt-12 flex w-full flex-1 flex-col items-center">
       {movieLoading && (
         <div>
           <Skeleton className="h-10 w-[400px] bg-slate-500" />

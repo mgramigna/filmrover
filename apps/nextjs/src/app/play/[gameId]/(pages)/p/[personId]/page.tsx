@@ -69,7 +69,7 @@ export default function PersonDetailPage() {
   }
 
   return (
-    <div className="container mt-12 flex w-full flex-col items-center">
+    <div className="container mt-12 flex w-full flex-1 flex-col items-center">
       {!personLoading && person && (
         <div className="flex justify-center">
           <h1 className="text-center text-5xl font-extrabold tracking-tight">
