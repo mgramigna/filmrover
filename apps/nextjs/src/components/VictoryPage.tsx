@@ -70,7 +70,7 @@ export const VictoryPage = ({
         <div className="rounded-lg border border-slate-50 p-4 text-center text-xl font-bold">
           {formatTimer(time)}
         </div>
-        <div className="text-3xl font-bold">How you got here</div>
+        <div className="text-2xl font-bold">{history.length - 1} Clicks</div>
         <div className="flex flex-row flex-wrap items-center justify-center gap-8">
           {history.map(({ id, display }, i) => {
             const key = `${id}-${i}`;

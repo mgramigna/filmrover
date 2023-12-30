@@ -89,13 +89,13 @@ export default function PersonDetailPage() {
           <ImagePlaceholder />
         )}
       </div>
-      <div className="mt-12 flex justify-center md:w-full">
+      <div className="mt-12 flex justify-center pb-24 md:w-full">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">
-              Directing
-            </h3>
-            <div className="mt-8 flex flex-col gap-2">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Directing
+              </h3>
               {directing.length > 0 ? (
                 directing.map(({ id, title }) => (
                   <div key={id}>
@@ -110,13 +110,15 @@ export default function PersonDetailPage() {
                   </div>
                 ))
               ) : !creditsLoading ? (
-                <div className="text-sm italic">None</div>
+                <div className="w-72 text-sm italic">None</div>
               ) : null}
             </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            <div className="mt-8 flex flex-col gap-2">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Cast
+              </h3>
               {filteredCast.length > 0 ? (
                 filteredCast.map(({ credit_id, id, title }) => (
                   <div key={credit_id}>
@@ -131,13 +133,15 @@ export default function PersonDetailPage() {
                   </div>
                 ))
               ) : !creditsLoading ? (
-                <div className="text-sm italic">None</div>
+                <div className="w-72 text-sm italic">None</div>
               ) : null}
             </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-            <div className="mt-8 flex flex-col gap-2">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Crew
+              </h3>
               {filteredCrew.length > 0 ? (
                 filteredCrew.map(({ id, title, job }) => (
                   <div key={`${id}-${job}`}>
@@ -150,7 +154,7 @@ export default function PersonDetailPage() {
                   </div>
                 ))
               ) : !creditsLoading ? (
-                <div className="text-sm italic">None</div>
+                <div className="w-72 text-sm italic">None</div>
               ) : null}
             </div>
           </div>

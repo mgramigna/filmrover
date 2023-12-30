@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 import { TMDBImage } from "@/components/TMDBImage";
 import { Button } from "@/components/ui/button";
+import { useHistory } from "@/context/HistoryContext";
 import { useTimer } from "@/context/TimerContext";
 import { api } from "@/trpc/react";
 
@@ -14,6 +15,7 @@ export default function GameIdPage() {
   const { gameId } = useParams<{ gameId: string }>();
 
   const { start } = useTimer();
+  const { logHistory } = useHistory();
 
   const { data: game } = api.game.getById.useQuery({
     id: gameId,
@@ -107,6 +109,13 @@ export default function GameIdPage() {
           <div>
             <Button
               onClick={() => {
+                if (startMovie?.title) {
+                  logHistory({
+                    type: "movie",
+                    id: startMovieId,
+                    display: startMovie.title,
+                  });
+                }
                 start();
                 router.push(`/play/${gameId}/m/${startMovieId}`);
               }}
@@ -119,6 +128,13 @@ export default function GameIdPage() {
           <div>
             <Button
               onClick={() => {
+                if (startPerson?.name) {
+                  logHistory({
+                    type: "person",
+                    id: startPersonId,
+                    display: startPerson?.name,
+                  });
+                }
                 start();
                 router.push(`/play/${gameId}/p/${startPersonId}`);
               }}

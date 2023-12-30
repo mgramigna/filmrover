@@ -64,13 +64,13 @@ export default function MovieDetailPage() {
         )}
         {!movieLoading && movie && !movie.poster_path && <ImagePlaceholder />}
       </div>
-      <div className="mt-12 flex justify-center sm:w-full">
+      <div className="mt-12 flex justify-center pb-24 sm:w-full">
         <div className="grid grid-cols-1 gap-12 md:w-full md:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">
-              Directing
-            </h3>
-            <div className="mt-8 flex flex-col gap-2">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Directing
+              </h3>
               {uniqueDirectors
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ credit_id, name, id }) => (
@@ -85,9 +85,11 @@ export default function MovieDetailPage() {
                 ))}
             </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Cast</h3>
-            <div className="mt-8 flex flex-col gap-2">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Cast
+              </h3>
               {credits?.cast
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ id, name }) => (
@@ -102,9 +104,11 @@ export default function MovieDetailPage() {
                 ))}
             </div>
           </div>
-          <div>
-            <h3 className="text-3xl font-extrabold tracking-tight">Crew</h3>
-            <div className="flex flex-col gap-2 pt-8">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-2">
+              <h3 className="mb-8 text-3xl font-extrabold tracking-tight">
+                Crew
+              </h3>
               {uniqueCrew
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ id, credit_id, name, job }) => (
