@@ -19,7 +19,7 @@ const fontSans = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.VERCEL_ENV === "production"
-      ? "https://example.com/todo-prod-url"
+      ? "https://filmrover.vercel.app"
       : "http://localhost:3000",
   ),
   title: "FilmRover",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FilmRover",
     description: "Wikipedia game, but for movies!",
-    url: "https://exmaple.com/todo-prod-url",
+    url: "https://filmrover.vercel.app",
     siteName: "FilmRover",
   },
 };
