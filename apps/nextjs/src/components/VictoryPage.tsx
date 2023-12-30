@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@filmrover/api";
 
+import { useHistory } from "@/context/HistoryContext";
 import { useTimer } from "@/context/TimerContext";
-import { formatTimer } from "@/lib/utils";
+import { cn, formatTimer } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { TMDBImage } from "./TMDBImage";
@@ -23,6 +25,7 @@ export const VictoryPage = ({
   movie?: RouterOutputs["movie"]["getById"];
 }) => {
   const { pause, time } = useTimer();
+  const { history } = useHistory();
 
   const utils = api.useUtils();
   const completeGameMutation = api.game.complete.useMutation({
@@ -64,10 +67,32 @@ export const VictoryPage = ({
         <h2 className="text-center text-4xl font-extrabold tracking-tight">
           🎉 You win! 🎉
         </h2>
-        <div className="text-center text-3xl font-bold tracking-tight">
+        <div className="rounded-lg border border-slate-50 p-4 text-center text-xl font-bold">
           {formatTimer(time)}
         </div>
-        <div className="mt-12 flex gap-4">
+        <div className="text-3xl font-bold">How you got here</div>
+        <div className="flex flex-row flex-wrap items-center justify-center gap-8">
+          {history.map(({ id, display }, i) => {
+            const key = `${id}-${i}`;
+            return (
+              <Fragment key={key}>
+                <div
+                  className={cn(
+                    "",
+                    i === 0 && "text-yellow-300",
+                    i === history.length - 1 && "text-green-300",
+                  )}
+                >
+                  {display}
+                </div>
+                {i !== history.length - 1 && (
+                  <ChevronRight className="text-slate-300" />
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
+        <div className="mt-12 flex gap-4 pb-24">
           <Button
             variant="ghost"
             disabled={!game}

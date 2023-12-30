@@ -78,6 +78,8 @@ export default function MovieDetailPage() {
                     <ClickableDetail
                       href={`/play/${gameId}/p/${id}`}
                       label={name}
+                      type="person"
+                      id={id}
                     />
                   </div>
                 ))}
@@ -93,6 +95,8 @@ export default function MovieDetailPage() {
                     <ClickableDetail
                       href={`/play/${gameId}/p/${id}`}
                       label={name}
+                      type="person"
+                      id={id}
                     />
                   </div>
                 ))}
@@ -108,6 +112,8 @@ export default function MovieDetailPage() {
                     <ClickableDetail
                       href={`/play/${gameId}/p/${id}`}
                       label={`${name} (${job})`}
+                      type="person"
+                      id={id}
                     />
                   </div>
                 ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { GameProvider } from "@/context/GameContext";
+import { HistoryProvider } from "@/context/HistoryContext";
 import { TimerProvider } from "@/context/TimerContext";
 
 export default function PlayLayout({
@@ -10,7 +11,9 @@ export default function PlayLayout({
 }) {
   return (
     <GameProvider>
-      <TimerProvider>{children}</TimerProvider>
+      <TimerProvider>
+        <HistoryProvider>{children}</HistoryProvider>
+      </TimerProvider>
     </GameProvider>
   );
 }
