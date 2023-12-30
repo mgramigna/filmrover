@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     description: "Wikipedia game, but for movies!",
     url: "https://filmrover.vercel.app",
     siteName: "FilmRover",
+    images: [
+      {
+        url: "https://filmrover.vercel.app/assets/og-image.png",
+      },
+    ],
   },
 };
 
