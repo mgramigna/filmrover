@@ -98,18 +98,28 @@ export default function PersonDetailPage() {
                 Directing
               </h3>
               {directing.length > 0 ? (
-                directing.map(({ id, title }) => (
-                  <div key={id}>
-                    {title && (
-                      <ClickableDetail
-                        href={`/play/${gameId}/m/${id}`}
-                        label={title}
-                        type="movie"
-                        id={id}
-                      />
-                    )}
-                  </div>
-                ))
+                directing.map(({ id, title, release_date }) => {
+                  const releaseDate = release_date
+                    ? dayjs(release_date)
+                    : undefined;
+
+                  return (
+                    <div key={id}>
+                      {title && (
+                        <ClickableDetail
+                          href={`/play/${gameId}/m/${id}`}
+                          label={`${title}${
+                            releaseDate?.isValid()
+                              ? ` (${releaseDate.format("YYYY")})`
+                              : ""
+                          }`}
+                          type="movie"
+                          id={id}
+                        />
+                      )}
+                    </div>
+                  );
+                })
               ) : !creditsLoading ? (
                 <div className="w-72 text-sm italic">None</div>
               ) : null}
