@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { match, P } from "ts-pattern";
 import { z } from "zod";
 
 import { Autocomplete } from "@/components/ui/autocomplete";
@@ -187,6 +188,9 @@ export const CreateGameForm = ({
         enabled: debouncedEndPerson.length > 3,
       },
     );
+
+  const { data: dailyChallenge } =
+    api.challenge.getCurrentDailyChallenge.useQuery();
 
   const { refetch: fetchRandomMovie } =
     api.movie.getRandomPopularMovie.useQuery(undefined, { enabled: false });
@@ -445,8 +449,157 @@ export const CreateGameForm = ({
     }
   }, [fetchRandomMovie, fetchRandomPerson, setValue, updateQueryParams]);
 
+  const populateWithDailyChallenge = useCallback(() => {
+    if (!dailyChallenge) return;
+
+    match(dailyChallenge)
+      .with(
+        { startMovieId: P.number, endMovieId: P.number },
+        ({ startMovieId, endMovieId }) => {
+          setValue("startMovieId", startMovieId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endMovieId", endMovieId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "startMovie",
+              value: startMovieId.toString(),
+            },
+            {
+              key: "endMovie",
+              value: endMovieId.toString(),
+            },
+          ]);
+        },
+      )
+      .with(
+        { startMovieId: P.number, endPersonId: P.number },
+        ({ startMovieId, endPersonId }) => {
+          setValue("startMovieId", startMovieId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", endPersonId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "startMovie",
+              value: startMovieId.toString(),
+            },
+            {
+              key: "endPerson",
+              value: endPersonId.toString(),
+            },
+          ]);
+        },
+      )
+      .with(
+        { startPersonId: P.number, endMovieId: P.number },
+        ({ startPersonId, endMovieId }) => {
+          setValue("startMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endMovieId", endMovieId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", startPersonId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "startPerson",
+              value: startPersonId.toString(),
+            },
+            {
+              key: "endMovie",
+              value: endMovieId.toString(),
+            },
+          ]);
+        },
+      )
+      .with(
+        { startPersonId: P.number, endPersonId: P.number },
+        ({ startPersonId, endPersonId }) => {
+          setValue("startMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", startPersonId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", endPersonId, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "startPerson",
+              value: startPersonId.toString(),
+            },
+            {
+              key: "endPerson",
+              value: endPersonId.toString(),
+            },
+          ]);
+        },
+      );
+  }, [dailyChallenge, setValue, updateQueryParams]);
+
   return (
     <div className="container flex flex-col items-center">
+      {dailyChallenge && (
+        <>
+          <div className="mt-12">
+            <h2 className="text-4xl font-bold">Daily Challenge</h2>
+          </div>
+          <div className="mt-4 flex flex-col items-center">
+            <div className="flex gap-2 text-xl">
+              <div>{dailyChallenge.startLabel}</div>
+              <div>➡️</div>
+              <div>{dailyChallenge.endLabel}</div>
+            </div>
+            <div className="mt-4">
+              <Button onClick={populateWithDailyChallenge}>
+                Play Daily Challenge
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
       <div className="mt-12">
         <h2 className="text-4xl font-bold">Step 1: Choose a starting point</h2>
       </div>
