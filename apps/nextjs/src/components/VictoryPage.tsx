@@ -1,6 +1,6 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { RouterOutputs } from "@filmrover/api";
@@ -46,6 +46,40 @@ export const VictoryPage = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pause, gameId]);
+
+  const getGameLink = useCallback(() => {
+    if (!game) return;
+
+    const start = {
+      type:
+        game.startMovieId != null ? ("movie" as const) : ("person" as const),
+      id: game.startMovieId ?? game.startPersonId!,
+    };
+
+    const end = {
+      type: game.endMovieId != null ? ("movie" as const) : ("person" as const),
+      id: game.endMovieId ?? game.endPersonId!,
+    };
+
+    const params = new URLSearchParams({
+      ...(start.type === "movie"
+        ? {
+            startMovie: start.id.toString(),
+          }
+        : {
+            startPerson: start.id.toString(),
+          }),
+      ...(end.type === "movie"
+        ? {
+            endMovie: end.id.toString(),
+          }
+        : {
+            endPerson: end.id.toString(),
+          }),
+    });
+
+    return `${window.location.origin}/play?${params.toString()}`;
+  }, [game]);
 
   return (
     <div className="container mt-12 flex w-full flex-1 flex-col items-center">
@@ -94,61 +128,39 @@ export const VictoryPage = ({
         </div>
         <div className="mt-12 flex gap-4 pb-24">
           <Button
-            variant="ghost"
             disabled={!game}
+            variant="ghost"
             onClick={() => {
-              const start = {
-                type:
-                  game!.startMovieId != null
-                    ? ("movie" as const)
-                    : ("person" as const),
-                id:
-                  game!.startMovieId != null
-                    ? game!.startMovieId
-                    : game!.startPersonId!,
-              };
+              const gameLink = getGameLink();
 
-              const end = {
-                type:
-                  game!.endMovieId != null
-                    ? ("movie" as const)
-                    : ("person" as const),
-                id:
-                  game!.endMovieId != null
-                    ? game!.endMovieId
-                    : game!.endPersonId!,
-              };
+              const text = `I just got from ${history[0]?.display} to ${history[
+                history.length - 1
+              ]?.display} in ${formatTimer(time)} with ${
+                history.length - 1
+              } clicks on FilmRover! Give it a shot! ${gameLink}`;
 
-              const params = new URLSearchParams({
-                ...(start.type === "movie"
-                  ? {
-                      startMovie: start.id.toString(),
-                    }
-                  : {
-                      startPerson: start.id.toString(),
-                    }),
-                ...(end.type === "movie"
-                  ? {
-                      endMovie: end.id.toString(),
-                    }
-                  : {
-                      endPerson: end.id.toString(),
-                    }),
-              });
-
-              navigator.clipboard
-                .writeText(
-                  `${window.location.origin}/play?${params.toString()}`,
-                )
-                .then(() => {
-                  toast("Copied game link to clipboard!");
-                })
-                .catch(() => {
-                  toast("Something went wrong");
-                });
+              if (navigator.share) {
+                navigator
+                  .share({
+                    text,
+                  })
+                  .catch(console.error);
+              } else {
+                navigator.clipboard
+                  .writeText(text)
+                  .then(() => {
+                    toast("Copied results to clipboard!");
+                  })
+                  .catch(() => {
+                    toast("Something went wrong");
+                  });
+              }
             }}
           >
-            Copy Game Link
+            <span className="inline-block pr-2">
+              <Share2 />
+            </span>
+            Share Results
           </Button>
           <Link href="/play">
             <Button>New Game</Button>
