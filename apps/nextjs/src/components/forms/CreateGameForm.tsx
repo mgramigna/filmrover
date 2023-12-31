@@ -207,7 +207,9 @@ export const CreateGameForm = ({
       const search = currentParams.toString();
       const query = search !== "" ? `?${search}` : "";
 
-      router.push(`${pathname}${query}`);
+      router.push(`${pathname}${query}`, {
+        scroll: false,
+      });
     },
     [pathname, router, searchParams],
   );
