@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { match } from "ts-pattern";
 
 import type { RouterInputs } from "@filmrover/api";
@@ -16,7 +17,15 @@ const rollRandomSelection = async (dataType: "movie" | "person") => {
     .exhaustive();
 };
 
-const GET = async () => {
+const GET = async (req: NextRequest) => {
+  const authHeader = req.headers.get("authorization");
+
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+
   const randomStartType = getRandomType();
   let randomEndType = getRandomType();
 
