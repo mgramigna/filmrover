@@ -1,5 +1,11 @@
 {
   "github": {
     "silent": true
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/daily-challenge-update",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }
