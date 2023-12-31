@@ -67,25 +67,24 @@ export const personRouter = createTRPCRouter({
 
       return result.value;
     }),
-  getPopularList: publicProcedure
-    .input(
-      z.object({
-        page: z.number().optional(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const result = await ctx.tmdb.searchPopularPeople({
-        page: input.page,
+  getRandomPopularPerson: publicProcedure.query(async ({ ctx }) => {
+    // Choose between the first 5 pages of popular people
+    const randomPage = Math.floor(Math.random() * 5) + 1;
+
+    const result = await ctx.tmdb.searchPopularPeople({
+      page: randomPage,
+    });
+
+    if (result.isErr()) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: result.error.message,
+        cause: result.error,
       });
+    }
 
-      if (result.isErr()) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: result.error.message,
-          cause: result.error,
-        });
-      }
+    const { results } = result.value;
 
-      return result.value;
-    }),
+    return results[Math.floor(Math.random() * results.length)];
+  }),
 });

@@ -188,8 +188,10 @@ export const CreateGameForm = ({
       },
     );
 
-  const { data: popularMovies } = api.movie.getPopularList.useQuery({});
-  const { data: popularPeople } = api.person.getPopularList.useQuery({});
+  const { refetch: fetchRandomMovie } =
+    api.movie.getRandomPopularMovie.useQuery(undefined, { enabled: false });
+  const { refetch: fetchRandomPerson } =
+    api.person.getRandomPopularPerson.useQuery(undefined, { enabled: false });
 
   const updateQueryParams = useCallback(
     (values: { key: SearchParamKey; value: string }[]) => {
@@ -338,112 +340,110 @@ export const CreateGameForm = ({
   );
 
   const selectRandomStart = useCallback(() => {
-    if (!(popularMovies && popularPeople)) return;
-
     const randomStartType = Math.random() < 0.5 ? "movie" : "person";
 
-    const randomArray =
-      randomStartType === "movie"
-        ? popularMovies.results
-        : popularPeople.results;
-
-    const randomChoice =
-      randomArray[Math.floor(Math.random() * randomArray.length)];
-
     if (randomStartType === "movie") {
-      setValue("startMovieId", randomChoice?.id, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      setValue("startPersonId", undefined, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      fetchRandomMovie()
+        .then(({ data: movie }) => {
+          setValue("startMovieId", movie?.id, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
 
-      updateQueryParams([
-        {
-          key: "startMovie",
-          value: randomChoice?.id.toString() ?? "",
-        },
-        {
-          key: "startPerson",
-          value: "",
-        },
-      ]);
+          updateQueryParams([
+            {
+              key: "startMovie",
+              value: movie?.id.toString() ?? "",
+            },
+            {
+              key: "startPerson",
+              value: "",
+            },
+          ]);
+        })
+        .catch(() => toast("Something went wrong"));
     } else {
-      setValue("startMovieId", undefined, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      setValue("startPersonId", randomChoice?.id, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      fetchRandomPerson()
+        .then(({ data: person }) => {
+          setValue("startMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("startPersonId", person?.id, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
 
-      updateQueryParams([
-        {
-          key: "startPerson",
-          value: randomChoice?.id.toString() ?? "",
-        },
-        {
-          key: "startMovie",
-          value: "",
-        },
-      ]);
+          updateQueryParams([
+            {
+              key: "startPerson",
+              value: person?.id.toString() ?? "",
+            },
+            {
+              key: "startMovie",
+              value: "",
+            },
+          ]);
+        })
+        .catch(() => toast("Something went wrong"));
     }
-  }, [popularMovies, popularPeople, setValue, updateQueryParams]);
+  }, [fetchRandomMovie, fetchRandomPerson, setValue, updateQueryParams]);
 
   const selectRandomEnd = useCallback(() => {
-    if (!(popularMovies && popularPeople)) return;
-
     const randomEndType = Math.random() < 0.5 ? "movie" : "person";
 
-    const randomArray =
-      randomEndType === "movie" ? popularMovies.results : popularPeople.results;
-
-    const randomChoice =
-      randomArray[Math.floor(Math.random() * randomArray.length)];
-
     if (randomEndType === "movie") {
-      setValue("endMovieId", randomChoice?.id, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      setValue("endPersonId", undefined, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      updateQueryParams([
-        {
-          key: "endMovie",
-          value: randomChoice?.id.toString() ?? "",
-        },
-        {
-          key: "endPerson",
-          value: "",
-        },
-      ]);
+      fetchRandomMovie()
+        .then(({ data: movie }) => {
+          setValue("endMovieId", movie?.id, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "endMovie",
+              value: movie?.id.toString() ?? "",
+            },
+            {
+              key: "endPerson",
+              value: "",
+            },
+          ]);
+        })
+        .catch(() => toast("Something went wrong"));
     } else {
-      setValue("endMovieId", undefined, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      setValue("endPersonId", randomChoice?.id, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-      updateQueryParams([
-        {
-          key: "endMovie",
-          value: "",
-        },
-        {
-          key: "endPerson",
-          value: randomChoice?.id.toString() ?? "",
-        },
-      ]);
+      fetchRandomPerson()
+        .then(({ data: person }) => {
+          setValue("endMovieId", undefined, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          setValue("endPersonId", person?.id, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          updateQueryParams([
+            {
+              key: "endMovie",
+              value: "",
+            },
+            {
+              key: "endPerson",
+              value: person?.id.toString() ?? "",
+            },
+          ]);
+        })
+        .catch(() => toast("Something went wrong"));
     }
-  }, [popularMovies, popularPeople, setValue, updateQueryParams]);
+  }, [fetchRandomMovie, fetchRandomPerson, setValue, updateQueryParams]);
 
   return (
     <div className="container flex flex-col items-center">
@@ -529,7 +529,11 @@ export const CreateGameForm = ({
       </div>
       <div className="mt-4 text-xl sm:text-2xl">
         {selectedStartMovie
-          ? selectedStartMovie.title
+          ? `${selectedStartMovie.title}${
+              selectedStartMovie.release_date !== ""
+                ? ` (${dayjs(selectedStartMovie.release_date).format("YYYY")})`
+                : ""
+            }`
           : selectedStartPerson
             ? selectedStartPerson.name
             : null}
@@ -538,11 +542,7 @@ export const CreateGameForm = ({
         <Button variant="ghost" onClick={clearStart}>
           Clear
         </Button>
-        <Button
-          variant="secondary"
-          onClick={selectRandomStart}
-          disabled={!(popularMovies && popularPeople)}
-        >
+        <Button variant="secondary" onClick={selectRandomStart}>
           Choose For Me
         </Button>
       </div>
@@ -628,7 +628,11 @@ export const CreateGameForm = ({
       </div>
       <div className="mt-4 text-xl sm:text-2xl">
         {selectedEndMovie
-          ? selectedEndMovie.title
+          ? `${selectedEndMovie.title}${
+              selectedEndMovie.release_date !== ""
+                ? ` (${dayjs(selectedEndMovie.release_date).format("YYYY")})`
+                : ""
+            }`
           : selectedEndPerson
             ? selectedEndPerson.name
             : null}
@@ -637,11 +641,7 @@ export const CreateGameForm = ({
         <Button variant="ghost" onClick={clearEnd}>
           Clear
         </Button>
-        <Button
-          variant="secondary"
-          disabled={!(popularMovies && popularPeople)}
-          onClick={selectRandomEnd}
-        >
+        <Button variant="secondary" onClick={selectRandomEnd}>
           Choose For Me
         </Button>
       </div>

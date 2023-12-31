@@ -160,6 +160,25 @@ export class TMDBClient {
     return result;
   }
 
+  async discoverMovies({
+    page = 1,
+    includeInternational,
+  }: {
+    page?: number;
+    includeInternational?: boolean;
+  }): Promise<Result<MovieSearchResult, Error>> {
+    const result = await this.fetch({
+      schema: MovieSearchResultSchema,
+      path: "/discover/movie",
+      query: new URLSearchParams({
+        page: page.toString(),
+        ...(!includeInternational && { with_origin_country: "US" }),
+      }).toString(),
+    });
+
+    return result;
+  }
+
   async searchPopularPeople({
     page = 1,
   }: {

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
+import dayjs from "dayjs";
 
 import { ClickableDetail } from "@/components/ClickableDetail";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
@@ -120,18 +121,25 @@ export default function PersonDetailPage() {
                 Cast
               </h3>
               {filteredCast.length > 0 ? (
-                filteredCast.map(({ credit_id, id, title }) => (
-                  <div key={credit_id}>
-                    {title && (
-                      <ClickableDetail
-                        href={`/play/${gameId}/m/${id}`}
-                        label={title}
-                        type="movie"
-                        id={id}
-                      />
-                    )}
-                  </div>
-                ))
+                filteredCast.map(({ credit_id, id, title, release_date }) => {
+                  const releaseDate = dayjs(release_date);
+                  return (
+                    <div key={credit_id}>
+                      {title && (
+                        <ClickableDetail
+                          href={`/play/${gameId}/m/${id}`}
+                          label={`${title}${
+                            releaseDate.isValid()
+                              ? ` (${releaseDate.format("YYYY")})`
+                              : ""
+                          }`}
+                          type="movie"
+                          id={id}
+                        />
+                      )}
+                    </div>
+                  );
+                })
               ) : !creditsLoading ? (
                 <div className="w-72 text-sm italic">None</div>
               ) : null}
