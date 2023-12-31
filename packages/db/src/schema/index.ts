@@ -12,3 +12,12 @@ export const games = sqliteTable("games", {
   endPersonId: int("end_person_id"),
   isFinished: int("is_finished", { mode: "boolean" }),
 });
+
+export const dailyChallenge = sqliteTable("daily_challenge", {
+  id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  isActive: int("is_active", { mode: "boolean" }),
+  startMovieId: int("start_movie_id"),
+  endMovieId: int("end_movie_id"),
+  startPersonId: int("start_person_id"),
+  endPersonId: int("end_person_id"),
+});
