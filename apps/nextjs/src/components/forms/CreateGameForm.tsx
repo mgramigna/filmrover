@@ -587,7 +587,7 @@ export const CreateGameForm = ({
             <h2 className="text-4xl font-bold">Daily Challenge</h2>
           </div>
           <div className="mt-4 flex flex-col items-center">
-            <div className="flex gap-2 text-xl">
+            <div className="flex gap-2 text-center text-xl">
               <div>{dailyChallenge.startLabel}</div>
               <div>➡️</div>
               <div>{dailyChallenge.endLabel}</div>
