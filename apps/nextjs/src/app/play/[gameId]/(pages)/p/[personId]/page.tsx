@@ -36,7 +36,16 @@ export default function PersonDetailPage() {
     () =>
       credits?.cast
         .sort((a, b) => b.popularity - a.popularity)
-        .filter(({ media_type }) => media_type === "movie") ?? [],
+        .filter(({ media_type }) => media_type === "movie")
+        .filter(({ release_date }) => {
+          if (!release_date) return false;
+
+          const releaseDate = dayjs(release_date);
+
+          if (!releaseDate.isValid()) return false;
+
+          return releaseDate.isBefore(dayjs());
+        }) ?? [],
     [credits],
   );
 
@@ -47,7 +56,16 @@ export default function PersonDetailPage() {
         .filter(
           ({ media_type, department }) =>
             media_type === "movie" && department !== "Directing",
-        ) ?? [],
+        )
+        .filter(({ release_date }) => {
+          if (!release_date) return false;
+
+          const releaseDate = dayjs(release_date);
+
+          if (!releaseDate.isValid()) return false;
+
+          return releaseDate.isBefore(dayjs());
+        }) ?? [],
     [credits],
   );
 

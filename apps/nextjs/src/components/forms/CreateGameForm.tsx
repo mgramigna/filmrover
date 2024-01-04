@@ -223,7 +223,11 @@ export const CreateGameForm = ({
   useEffect(() => {
     const newResults =
       startMovies?.results
-        .filter(({ release_date }) => dayjs(release_date).isValid())
+        .filter(
+          ({ release_date }) =>
+            dayjs(release_date).isValid() &&
+            dayjs(release_date).isBefore(dayjs()),
+        )
         .map(({ id, title, release_date }) => ({
           value: id.toString(),
           label: `${title} (${dayjs(release_date).format("YYYY")})`,
@@ -245,7 +249,11 @@ export const CreateGameForm = ({
   useEffect(() => {
     const newResults =
       endMovies?.results
-        .filter(({ release_date }) => dayjs(release_date).isValid())
+        .filter(
+          ({ release_date }) =>
+            dayjs(release_date).isValid() &&
+            dayjs(release_date).isBefore(dayjs()),
+        )
         .map(({ id, title, release_date }) => ({
           value: id.toString(),
           label: `${title} (${dayjs(release_date).format("YYYY")})`,

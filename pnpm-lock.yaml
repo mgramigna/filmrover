@@ -245,6 +245,9 @@ importers:
 
   packages/tmdb:
     dependencies:
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       neverthrow:
         specifier: ^6.1.0
         version: 6.1.0

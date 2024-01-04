@@ -1,5 +1,6 @@
 import type { Result } from "neverthrow";
 import type { ZodType, ZodTypeDef } from "zod";
+import dayjs from "dayjs";
 import { ResultAsync } from "neverthrow";
 
 import type { MovieDetail, MovieSearchResult } from "./types";
@@ -172,6 +173,7 @@ export class TMDBClient {
       path: "/discover/movie",
       query: new URLSearchParams({
         page: page.toString(),
+        "primary_release_date.lte": dayjs().format("YYYY-MM-DD"),
         ...(!includeInternational && { with_origin_country: "US" }),
       }).toString(),
     });
