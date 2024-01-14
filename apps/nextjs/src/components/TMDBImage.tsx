@@ -1,11 +1,12 @@
-import Image from "next/image";
+import _Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
+// TODO: re-enable next Image once I'm not blowing through my caching limit
 export const TMDBImage = ({
   slug,
   title,
-  priority,
+  priority: _priority,
   size = "default",
 }: {
   slug: string;
@@ -33,13 +34,11 @@ export const TMDBImage = ({
           size === "sm" && "h-[150px] w-[100px]",
         )}
       >
-        <Image
-          className="rounded-lg"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="h-full w-full rounded-lg"
           src={`https://image.tmdb.org/t/p/original${slug}`}
-          alt={`${title} Image`}
-          priority={priority}
-          width={200}
-          height={300}
+          alt={title}
         />
       </div>
     </div>
