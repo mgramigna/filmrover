@@ -13,7 +13,8 @@
     "@filmrover/db": "workspace:*",
     "@filmrover/tmdb": "workspace:*",
     "astro": "^5.1.7",
-    "astro-sst": "^2.45.2"
+    "astro-sst": "^2.45.2",
+    "ts-pattern": "^5.6.0"
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4"

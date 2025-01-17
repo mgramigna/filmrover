@@ -15,7 +15,9 @@
     "kit": "sst shell drizzle-kit",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ulid": "^2.3.0"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@filmrover/tsconfig": "workspace:*",

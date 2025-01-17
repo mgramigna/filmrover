@@ -9,14 +9,17 @@ import type { MovieCredit, PersonCredit } from "./types/credits";
 import { MovieCreditSchema, PersonCreditSchema } from "./types/credits";
 import type { PersonDetail, PersonSearchResult } from "./types/person";
 import { PersonDetailSchema, PersonSearchResultSchema } from "./types/person";
+import { Resource } from "sst";
 
 const TMDB_API_URL = "https://api.themoviedb.org/3";
 
 export class TMDBClient {
   baseUrl: string;
+  bearerToken: string;
 
-  constructor(public bearerToken: string) {
+  constructor() {
     this.baseUrl = TMDB_API_URL;
+    this.bearerToken = Resource.TMDB_ACCESS_TOKEN.value;
   }
 
   private fetch<T>({
