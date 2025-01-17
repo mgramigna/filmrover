@@ -12,8 +12,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "drizzle-kit": "^0.30.2",
     "sst": "3.5.13",
     "typescript": "5.7.2"
   },
-  "workspaces": ["packages/*", "tooling/*"]
+  "workspaces": ["packages/*", "tooling/*"],
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "drizzle-orm": "^0.38.4"
+  }
 }
