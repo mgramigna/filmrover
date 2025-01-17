@@ -9,5 +9,14 @@ export default $config({
       home: "aws",
     };
   },
-  async run() {},
+  async run() {
+    const tmdbAccessToken = new sst.Secret("TMDB_ACCESS_TOKEN");
+    const databaseUrl = new sst.Secret("DATABASE_URL");
+    const databaseAuthToken = new sst.Secret("DATABASE_AUTH_TOKEN");
+
+    new sst.aws.Astro("WebApp", {
+      path: "./packages/www",
+      link: [tmdbAccessToken, databaseUrl, databaseAuthToken],
+    });
+  },
 });

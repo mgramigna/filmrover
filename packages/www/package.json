@@ -10,7 +10,8 @@
     "typecheck": "astro sync && tsc --noEmit"
   },
   "dependencies": {
+    "@filmrover/db": "workspace:*",
     "astro": "^5.1.7",
-    "@filmrover/db": "workspace:*"
+    "astro-sst": "^2.45.2"
   }
 }

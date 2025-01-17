@@ -12,8 +12,7 @@
     "check": "biome check .",
     "lint": "biome lint .",
     "format": "biome format .",
-    "kit": "drizzle-kit",
-    "migrate": "bun run ./bin/migrate.ts",
+    "kit": "sst shell drizzle-kit",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {},

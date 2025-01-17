@@ -1,13 +1,12 @@
 import type { Config } from "drizzle-kit";
+import { Resource } from "sst";
 
 export default {
   schema: "./src/schema/index.ts",
   out: "./drizzle",
   dialect: "turso",
   dbCredentials: {
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    url: process.env.DATABASE_URL!,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    authToken: process.env.DATABASE_AUTH_TOKEN!,
+    url: Resource.DATABASE_URL.value,
+    authToken: Resource.DATABASE_AUTH_TOKEN.value,
   },
 } satisfies Config;

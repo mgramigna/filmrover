@@ -1,11 +1,10 @@
 import { drizzle } from "drizzle-orm/libsql";
+import { Resource } from "sst";
 
 export const db = drizzle({
   connection: {
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    url: process.env.DATABASE_URL!,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    authToken: process.env.DATABASE_AUTH_TOKEN!,
+    url: Resource.DATABASE_URL.value,
+    authToken: Resource.DATABASE_AUTH_TOKEN.value,
   },
 });
 
