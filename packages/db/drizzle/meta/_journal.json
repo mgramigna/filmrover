@@ -4,30 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1703733229907,
-      "tag": "0000_warm_alex_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1703781656879,
-      "tag": "0001_brainy_wallop",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1703784579236,
-      "tag": "0002_bitter_blacklash",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1704049419495,
-      "tag": "0003_glamorous_shocker",
+      "version": "6",
+      "when": 1737078082867,
+      "tag": "0000_flawless_mac_gargan",
       "breakpoints": true
     }
   ]

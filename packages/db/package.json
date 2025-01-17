@@ -12,18 +12,14 @@
     "check": "biome check .",
     "lint": "biome lint .",
     "format": "biome format .",
-    "generate": "drizzle-kit generate:sqlite",
+    "kit": "drizzle-kit",
     "migrate": "bun run ./bin/migrate.ts",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@libsql/client": "0.4.0-pre.5",
-    "drizzle-orm": "^0.29.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@filmrover/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.20.9",
     "typescript": "5.7.2"
   }
 }
