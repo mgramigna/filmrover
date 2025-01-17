@@ -37,6 +37,7 @@ export const game = {
       startPersonId: z.number().nullish().default(null),
       endPersonId: z.number().nullish().default(null),
     }),
+    accept: "form",
     handler: async (input) => {
       const { startMovieId, startPersonId, endMovieId, endPersonId } = input;
 
@@ -60,7 +61,7 @@ export const game = {
         });
       }
 
-      return result.gameId;
+      return { gameId: result.gameId };
     },
   }),
   complete: defineAction({

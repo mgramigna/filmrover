@@ -1,0 +1,77 @@
+---
+import { actions } from "astro:actions";
+
+const { movieId, gameId } = Astro.params;
+
+if (!movieId || !gameId) {
+  throw new Error("NOT FOUND");
+}
+
+const { data: movie } = await Astro.callAction(actions.movie.getById, {
+  id: Number(movieId),
+});
+
+const { data: credits } = await Astro.callAction(actions.movie.getCredits, {
+  id: Number(movieId),
+});
+
+const directors = credits?.crew.filter(({ job }) => job === "Director") ?? [];
+
+const uniqueDirectors = [
+  ...new Map(directors.map((item) => [item.id, item])).values(),
+];
+
+const uniqueCrew = [
+  ...new Map(credits?.crew.map((item) => [item.id, item]) ?? []).values(),
+];
+---
+
+<div>
+  <div>
+    <h1>
+      {movie?.title}
+    </h1>
+  </div>
+  <div>
+    <div>
+      <div>
+        <div>
+          <h3>Directing</h3>
+          {
+            uniqueDirectors
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ credit_id, name, id }) => (
+                <a href={`/play/${gameId}/p/${id}`}>{name}</a>
+              ))
+          }
+        </div>
+      </div>
+      <div>
+        <div>
+          <h3>Cast</h3>
+          {
+            credits?.cast
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ id, name }) => (
+                <a href={`/play/${gameId}/p/${id}`}>{name}</a>
+              ))
+          }
+        </div>
+      </div>
+      <div>
+        <div>
+          <h3>Crew</h3>
+          {
+            uniqueCrew
+              .sort((a, b) => b.popularity - a.popularity)
+              .map(({ id, credit_id, name, job }) => (
+                <a href={`/play/${gameId}/p/${id}`}>
+                  {name} {job}
+                </a>
+              ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

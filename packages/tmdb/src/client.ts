@@ -33,8 +33,6 @@ export class TMDBClient {
   }): ResultAsync<T, Error> {
     const queryString = query ? `?${query}` : "";
 
-    console.log(`[TMDB] GET ${path}${queryString}`);
-
     return ResultAsync.fromPromise(
       fetch(`${this.baseUrl}/${path}${queryString}`, {
         method: "GET",

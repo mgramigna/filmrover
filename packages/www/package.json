@@ -15,6 +15,7 @@
     "@filmrover/tmdb": "workspace:*",
     "astro": "^5.1.7",
     "astro-sst": "^2.45.2",
+    "date-fns": "^4.1.0",
     "ts-pattern": "^5.6.0"
   },
   "devDependencies": {
