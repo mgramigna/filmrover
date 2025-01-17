@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@filmrover/db": "workspace:*",
+    "@filmrover/tmdb": "workspace:*",
     "astro": "^5.1.7",
     "astro-sst": "^2.45.2"
+  },
+  "devDependencies": {
+    "@astrojs/ts-plugin": "^1.10.4"
   }
 }
