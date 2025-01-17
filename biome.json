@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["./sst-env.d.ts"]
+    "ignore": ["./sst-env.d.ts", "./packages/www/**/*.astro"]
   },
   "organizeImports": {
     "enabled": true

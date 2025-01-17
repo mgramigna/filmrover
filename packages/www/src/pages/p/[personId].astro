@@ -1,0 +1,15 @@
+---
+import { actions } from "astro:actions";
+
+const { personId } = Astro.params;
+
+if (!personId) {
+  throw new Error("NOT FOUND");
+}
+
+const { data } = await Astro.callAction(actions.person.getById, {
+  id: Number(personId),
+});
+---
+
+<div>Person: {JSON.stringify(data)}</div>
