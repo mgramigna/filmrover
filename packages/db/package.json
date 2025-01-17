@@ -8,32 +8,22 @@
   },
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "rm -rf node_modules",
+    "check": "biome check .",
+    "lint": "biome lint .",
+    "format": "biome format .",
     "generate": "drizzle-kit generate:sqlite",
-    "lint": "eslint .",
-    "migrate": "pnpm with-env tsx ./bin/migrate.ts",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "migrate": "bun run ./bin/migrate.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@libsql/client": "0.4.0-pre.5",
     "drizzle-orm": "^0.29.2"
   },
   "devDependencies": {
-    "@filmrover/eslint-config": "workspace:*",
-    "@filmrover/prettier-config": "workspace:*",
+    "@biomejs/biome": "1.9.4",
     "@filmrover/tsconfig": "workspace:*",
     "drizzle-kit": "^0.20.9",
-    "eslint": "^8.56.0",
-    "prettier": "^3.1.1",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@filmrover/eslint-config/base"
-    ]
-  },
-  "prettier": "@filmrover/prettier-config"
+    "typescript": "5.7.2"
+  }
 }
