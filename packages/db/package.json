@@ -16,11 +16,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "drizzle-orm": "^0.38.4",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@filmrover/tsconfig": "workspace:*",
+    "drizzle-kit": "^0.30.2",
     "typescript": "5.7.2"
   }
 }
