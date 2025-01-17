@@ -1,5 +1,7 @@
 ---
 import { actions } from "astro:actions";
+import { isBefore } from "date-fns/isBefore";
+import Layout from "../../../../layouts/Layout.astro";
 
 const { personId, gameId } = Astro.params;
 
@@ -7,13 +9,23 @@ if (!personId || !gameId) {
   throw new Error("NOT FOUND");
 }
 
-const { data: person } = await Astro.callAction(actions.person.getById, {
-  id: Number(personId),
-});
+const [{ data: game }, { data: person }, { data: credits }] = await Promise.all(
+  [
+    await Astro.callAction(actions.game.getById, {
+      id: gameId,
+    }),
+    await Astro.callAction(actions.person.getById, {
+      id: Number(personId),
+    }),
+    await Astro.callAction(actions.person.getCredits, {
+      id: Number(personId),
+    }),
+  ],
+);
 
-const { data: credits } = await Astro.callAction(actions.person.getCredits, {
-  id: Number(personId),
-});
+if (game?.endPersonId === Number(personId)) {
+  // TODO: redirect to victory page
+}
 
 const filteredCast =
   credits?.cast
@@ -24,8 +36,7 @@ const filteredCast =
 
       const releaseDate = new Date(release_date);
 
-      // TODO
-      return true;
+      return isBefore(releaseDate, new Date());
     }) ?? [];
 
 const filteredCrew =
@@ -40,8 +51,7 @@ const filteredCrew =
 
       const releaseDate = new Date(release_date);
 
-      // TODO
-      return true;
+      return isBefore(releaseDate, new Date());
     }) ?? [];
 
 const directing =
@@ -53,76 +63,78 @@ const directing =
     ) ?? [];
 ---
 
-<div>
+<Layout>
   <div>
-    <h1>
-      {person?.name}
-    </h1>
-  </div>
-  <div>
+    <div>
+      <h1>
+        {person?.name}
+      </h1>
+    </div>
     <div>
       <div>
         <div>
-          <h3>Directing</h3>
-          {
-            directing.length > 0
-              ? directing.map(({ id, title, release_date }) => {
-                  const releaseDate = release_date
-                    ? new Date(release_date)
-                    : undefined;
+          <div>
+            <h3>Directing</h3>
+            {
+              directing.length > 0
+                ? directing.map(({ id, title, release_date }) => {
+                    const releaseDate = release_date
+                      ? new Date(release_date)
+                      : undefined;
 
-                  return (
-                    <div>
-                      {title && (
-                        <a href={`/play/${gameId}/m/${id}`}>
-                          {title} ({releaseDate?.getFullYear()})
-                        </a>
-                      )}
-                    </div>
-                  );
-                })
-              : null
-          }
+                    return (
+                      <div>
+                        {title && (
+                          <a href={`/play/${gameId}/m/${id}`}>
+                            {title} ({releaseDate?.getFullYear()})
+                          </a>
+                        )}
+                      </div>
+                    );
+                  })
+                : null
+            }
+          </div>
         </div>
-      </div>
-      <div>
         <div>
-          <h3>Cast</h3>
-          {
-            filteredCast.length > 0
-              ? filteredCast.map(({ credit_id, id, title, release_date }) => {
-                  const releaseDate = release_date
-                    ? new Date(release_date)
-                    : undefined;
+          <div>
+            <h3>Cast</h3>
+            {
+              filteredCast.length > 0
+                ? filteredCast.map(({ id, title, release_date }) => {
+                    const releaseDate = release_date
+                      ? new Date(release_date)
+                      : undefined;
 
-                  return (
-                    <div>
-                      {title && (
-                        <a href={`/play/${gameId}/m/${id}`}>
-                          {title} ({releaseDate?.getFullYear()})
-                        </a>
-                      )}
-                    </div>
-                  );
-                })
-              : null
-          }
+                    return (
+                      <div>
+                        {title && (
+                          <a href={`/play/${gameId}/m/${id}`}>
+                            {title} ({releaseDate?.getFullYear()})
+                          </a>
+                        )}
+                      </div>
+                    );
+                  })
+                : null
+            }
+          </div>
         </div>
-      </div>
-      <div>
         <div>
-          <h3>Crew</h3>
-          {
-            filteredCrew.length > 0
-              ? filteredCrew.map(({ id, title, job }) => (
-                  <a href={`/play/${gameId}/m/${id}`}>
-                    {title} ({job})
-                  </a>
-                ))
-              : null
-          }
+          <div>
+            <h3>Crew</h3>
+            {
+              filteredCrew.length > 0
+                ? filteredCrew.map(({ id, title, job }) => (
+                    <a href={`/play/${gameId}/m/${id}`}>
+                      {title} ({job})
+                    </a>
+                  ))
+                : null
+            }
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</Layout>

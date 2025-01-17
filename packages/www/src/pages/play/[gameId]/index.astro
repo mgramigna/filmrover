@@ -1,5 +1,6 @@
 ---
 import { actions } from "astro:actions";
+import Layout from "../../../layouts/Layout.astro";
 
 const { gameId } = Astro.params;
 
@@ -12,18 +13,20 @@ const { data } = await Astro.callAction(actions.game.getById, {
 });
 ---
 
-<div>
-  <div>Game: {JSON.stringify(data)}</div>
+<Layout>
   <div>
-    {
-      data?.startMovieId && (
-        <a href={`/play/${gameId}/m/${data.startMovieId}`}>Start</a>
-      )
-    }
-    {
-      data?.startPersonId && (
-        <a href={`/play/${gameId}/p/${data.startPersonId}`}>Start</a>
-      )
-    }
+    <div>Game: {JSON.stringify(data)}</div>
+    <div>
+      {
+        data?.startMovieId && (
+          <a href={`/play/${gameId}/m/${data.startMovieId}`}>Start</a>
+        )
+      }
+      {
+        data?.startPersonId && (
+          <a href={`/play/${gameId}/p/${data.startPersonId}`}>Start</a>
+        )
+      }
+    </div>
   </div>
-</div>
+</Layout>

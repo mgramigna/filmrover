@@ -1,5 +1,6 @@
 ---
 import { actions } from "astro:actions";
+import Layout from "../layouts/Layout.astro";
 
 const { data } = await Astro.callAction(
   actions.challenge.getCurrentDailyChallenge,
@@ -12,16 +13,18 @@ if (result && !result.error) {
 }
 ---
 
-<div>
+<Layout>
   <div>
-    Daily C: {JSON.stringify(data)}
+    <div>
+      Daily C: {JSON.stringify(data)}
 
-    <form method="POST" action={actions.game.create}>
-      <input type="hidden" name="startMovieId" value={data?.startMovieId} />
-      <input type="hidden" name="startPersonId" value={data?.startPersonId} />
-      <input type="hidden" name="endMovieId" value={data?.endMovieId} />
-      <input type="hidden" name="endPersonId" value={data?.endPersonId} />
-      <button>Create Game</button>
-    </form>
+      <form method="POST" action={actions.game.create}>
+        <input type="hidden" name="startMovieId" value={data?.startMovieId} />
+        <input type="hidden" name="startPersonId" value={data?.startPersonId} />
+        <input type="hidden" name="endMovieId" value={data?.endMovieId} />
+        <input type="hidden" name="endPersonId" value={data?.endPersonId} />
+        <button>Create Game</button>
+      </form>
+    </div>
   </div>
-</div>
+</Layout>
