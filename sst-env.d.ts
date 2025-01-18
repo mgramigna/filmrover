@@ -13,13 +13,13 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "RemixApp": {
+      "type": "sst.aws.Remix"
+      "url": string
+    }
     "TMDB_ACCESS_TOKEN": {
       "type": "sst.sst.Secret"
       "value": string
-    }
-    "WebApp": {
-      "type": "sst.aws.Astro"
-      "url": string
     }
   }
 }
