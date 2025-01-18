@@ -1,7 +1,10 @@
 import { api } from "@/lib/api";
 import { isBefore } from "date-fns/isBefore";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import { ClickableDetail } from "@/components/clickable";
+import { Heading } from "@/components/ui/heading";
+import { Separator } from "@/components/ui/separator";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId, personId } = params;
@@ -63,15 +66,16 @@ export default function PersonPage() {
     useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <div>
-        <h1>{person.name}</h1>
+    <div className="container px-4 pb-24 sm:px-0">
+      <div className="mt-8 text-center">
+        <Heading variant="h1">{person.name}</Heading>
       </div>
-      <div>
+      <Separator className="my-6" />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div>
           <div>
-            <div>
-              <h3>Directing</h3>
+            <Heading variant="h3">Directing</Heading>
+            <div className="flex flex-col gap-2">
               {directing.length > 0
                 ? directing.map(({ id, title, release_date }) => {
                     const releaseDate = release_date
@@ -81,9 +85,12 @@ export default function PersonPage() {
                     return (
                       <div key={id}>
                         {title && (
-                          <a href={`/play/${gameId}/m/${id}`}>
-                            {title} ({releaseDate?.getFullYear()})
-                          </a>
+                          <ClickableDetail
+                            href={`/play/${gameId}/m/${id}`}
+                            label={`${title} (${releaseDate?.getFullYear()})`}
+                            type="movie"
+                            id={id}
+                          />
                         )}
                       </div>
                     );
@@ -91,9 +98,11 @@ export default function PersonPage() {
                 : null}
             </div>
           </div>
+        </div>
+        <div>
           <div>
-            <div>
-              <h3>Cast</h3>
+            <Heading variant="h3">Cast</Heading>
+            <div className="flex flex-col gap-2">
               {filteredCast.length > 0
                 ? filteredCast.map(({ id, title, release_date }) => {
                     const releaseDate = release_date
@@ -103,9 +112,12 @@ export default function PersonPage() {
                     return (
                       <div key={id}>
                         {title && (
-                          <Link to={`/play/${gameId}/m/${id}`}>
-                            {title} ({releaseDate?.getFullYear()})
-                          </Link>
+                          <ClickableDetail
+                            href={`/play/${gameId}/m/${id}`}
+                            label={`${title} (${releaseDate?.getFullYear()})`}
+                            type="movie"
+                            id={id}
+                          />
                         )}
                       </div>
                     );
@@ -113,14 +125,20 @@ export default function PersonPage() {
                 : null}
             </div>
           </div>
+        </div>
+        <div>
           <div>
-            <div>
-              <h3>Crew</h3>
+            <Heading variant="h3">Crew</Heading>
+            <div className="flex flex-col gap-2">
               {filteredCrew.length > 0
                 ? filteredCrew.map(({ id, title, job }) => (
-                    <Link key={id} to={`/play/${gameId}/m/${id}`}>
-                      {title} ({job})
-                    </Link>
+                    <ClickableDetail
+                      key={id}
+                      href={`/play/${gameId}/m/${id}`}
+                      label={`${title} (${job})`}
+                      type="movie"
+                      id={id}
+                    />
                   ))
                 : null}
             </div>

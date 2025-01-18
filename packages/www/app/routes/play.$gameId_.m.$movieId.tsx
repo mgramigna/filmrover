@@ -1,6 +1,9 @@
+import { ClickableDetail } from "@/components/clickable";
+import { Heading } from "@/components/ui/heading";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId, movieId } = params;
@@ -37,45 +40,62 @@ export default function MoviePage() {
     useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <div>
-        <h1>{movie.title}</h1>
+    <div className="container px-4 pb-24 sm:px-0">
+      <div className="mt-8 text-center">
+        <Heading variant="h1">{movie.title}</Heading>
       </div>
-      <div>
+      <Separator className="my-6" />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div>
           <div>
-            <div>
-              <h3>Directing</h3>
+            <Heading variant="h3">Directing</Heading>
+            <div className="flex flex-col gap-2">
               {uniqueDirectors
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ credit_id, name, id }) => (
-                  <Link key={credit_id} to={`/play/${gameId}/p/${id}`}>
-                    {name}
-                  </Link>
+                  <ClickableDetail
+                    href={`/play/${gameId}/p/${id}`}
+                    label={name}
+                    type="person"
+                    id={id}
+                    key={credit_id}
+                  />
                 ))}
             </div>
           </div>
+        </div>
+        <div>
           <div>
-            <div>
-              <h3>Cast</h3>
+            <Heading variant="h3">Cast</Heading>
+            <div className="flex flex-col gap-2">
               {credits.cast
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ credit_id, id, name }) => (
-                  <Link key={credit_id} to={`/play/${gameId}/p/${id}`}>
-                    {name}
-                  </Link>
+                  <ClickableDetail
+                    href={`/play/${gameId}/p/${id}`}
+                    label={name}
+                    type="person"
+                    id={id}
+                    key={credit_id}
+                  />
                 ))}
             </div>
           </div>
+        </div>
+        <div>
           <div>
-            <div>
-              <h3>Crew</h3>
+            <Heading variant="h3">Crew</Heading>
+            <div className="flex flex-col gap-2">
               {uniqueCrew
                 .sort((a, b) => b.popularity - a.popularity)
                 .map(({ id, credit_id, name, job }) => (
-                  <Link key={credit_id} to={`/play/${gameId}/p/${id}`}>
-                    {name} {job}
-                  </Link>
+                  <ClickableDetail
+                    href={`/play/${gameId}/p/${id}`}
+                    label={`${name} (${job})`}
+                    type="person"
+                    id={id}
+                    key={credit_id}
+                  />
                 ))}
             </div>
           </div>
