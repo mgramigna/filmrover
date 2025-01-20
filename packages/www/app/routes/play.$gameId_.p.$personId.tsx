@@ -1,3 +1,10 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import { api } from "@/lib/api";
 import { isBefore } from "date-fns/isBefore";
 import type { LoaderFunctionArgs } from "@remix-run/node";
@@ -89,86 +96,94 @@ export default function PersonPage() {
         <TMDBPoster slug={person.profile_path} title={person.name} />
       </div>
       <Separator className="my-6" />
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div>
-          <div>
-            <Heading variant="h3" className="pb-2 text-center">
-              Directing
-            </Heading>
-            <div className="flex flex-col gap-2">
-              {directing.length > 0
-                ? directing.map(({ id, title, release_date }) => {
-                    const releaseDate = release_date
-                      ? new Date(release_date)
-                      : undefined;
+      <Accordion type="multiple" defaultValue={["directing", "cast", "crew"]}>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <AccordionItem value="directing">
+            <AccordionTrigger>
+              <Heading variant="h3" className="pb-2 text-center">
+                Directing
+              </Heading>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-2">
+                {directing.length > 0
+                  ? directing.map(({ id, title, release_date }) => {
+                      const releaseDate = release_date
+                        ? new Date(release_date)
+                        : undefined;
 
-                    return (
-                      <div key={id}>
-                        {title && (
-                          <ClickableDetail
-                            href={`/play/${gameId}/m/${id}`}
-                            label={`${title} (${releaseDate?.getFullYear()})`}
-                            type="movie"
-                            id={id}
-                          />
-                        )}
-                      </div>
-                    );
-                  })
-                : null}
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <Heading variant="h3" className="pb-2 text-center">
-              Cast
-            </Heading>
-            <div className="flex flex-col gap-2">
-              {filteredCast.length > 0
-                ? filteredCast.map(({ id, title, release_date }) => {
-                    const releaseDate = release_date
-                      ? new Date(release_date)
-                      : undefined;
+                      return (
+                        <div key={id}>
+                          {title && (
+                            <ClickableDetail
+                              href={`/play/${gameId}/m/${id}`}
+                              label={`${title} (${releaseDate?.getFullYear()})`}
+                              type="movie"
+                              id={id}
+                            />
+                          )}
+                        </div>
+                      );
+                    })
+                  : null}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="cast">
+            <AccordionTrigger>
+              <Heading variant="h3" className="pb-2 text-center">
+                Cast
+              </Heading>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-2">
+                {filteredCast.length > 0
+                  ? filteredCast.map(({ id, title, release_date }) => {
+                      const releaseDate = release_date
+                        ? new Date(release_date)
+                        : undefined;
 
-                    return (
-                      <div key={id}>
-                        {title && (
-                          <ClickableDetail
-                            href={`/play/${gameId}/m/${id}`}
-                            label={`${title} (${releaseDate?.getFullYear()})`}
-                            type="movie"
-                            id={id}
-                          />
-                        )}
-                      </div>
-                    );
-                  })
-                : null}
-            </div>
-          </div>
+                      return (
+                        <div key={id}>
+                          {title && (
+                            <ClickableDetail
+                              href={`/play/${gameId}/m/${id}`}
+                              label={`${title} (${releaseDate?.getFullYear()})`}
+                              type="movie"
+                              id={id}
+                            />
+                          )}
+                        </div>
+                      );
+                    })
+                  : null}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="crew">
+            <AccordionTrigger>
+              <Heading variant="h3" className="pb-2 text-center">
+                Crew
+              </Heading>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-2">
+                {filteredCrew.length > 0
+                  ? filteredCrew.map(({ id, title, job }) => (
+                      <ClickableDetail
+                        key={id}
+                        href={`/play/${gameId}/m/${id}`}
+                        label={`${title} (${job})`}
+                        type="movie"
+                        id={id}
+                      />
+                    ))
+                  : null}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
         </div>
-        <div>
-          <div>
-            <Heading variant="h3" className="pb-2 text-center">
-              Crew
-            </Heading>
-            <div className="flex flex-col gap-2">
-              {filteredCrew.length > 0
-                ? filteredCrew.map(({ id, title, job }) => (
-                    <ClickableDetail
-                      key={id}
-                      href={`/play/${gameId}/m/${id}`}
-                      label={`${title} (${job})`}
-                      type="movie"
-                      id={id}
-                    />
-                  ))
-                : null}
-            </div>
-          </div>
-        </div>
-      </div>
+      </Accordion>
     </div>
   );
 }
