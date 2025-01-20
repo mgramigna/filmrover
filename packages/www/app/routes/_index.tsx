@@ -34,7 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     endPersonId,
   });
 
-  return redirect(`/play/${result.gameId}`);
+  return redirect(`/play/${result.gameId}/intro`);
 };
 
 export default function Index() {

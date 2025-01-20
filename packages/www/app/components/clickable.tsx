@@ -4,8 +4,8 @@ import { Button } from "./ui/button";
 export const ClickableDetail = ({
   href,
   label,
-  type,
-  id,
+  type: _type,
+  id: _id,
 }: {
   href: string;
   label: string;
@@ -13,7 +13,10 @@ export const ClickableDetail = ({
   id: number;
 }) => {
   return (
-    <Button asChild className="w-full">
+    <Button
+      asChild
+      className="w-full text-ellipsis whitespace-normal text-center"
+    >
       <Link to={href}>{label}</Link>
     </Button>
   );

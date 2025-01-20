@@ -1,10 +1,11 @@
 import { api } from "@/lib/api";
 import { isBefore } from "date-fns/isBefore";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
 import { ClickableDetail } from "@/components/clickable";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import { TMDBPoster } from "@/components/tmdb-poster";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId, personId } = params;
@@ -20,7 +21,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   ]);
 
   if (game.endPersonId === Number(personId)) {
-    // TODO: redirect to victory page
+    return redirect(`/play/${gameId}/victory`);
   }
 
   const filteredCast =
@@ -67,8 +68,11 @@ export default function PersonPage() {
 
   return (
     <div className="container px-4 pb-24 sm:px-0">
-      <div className="mt-8 text-center">
-        <Heading variant="h1">{person.name}</Heading>
+      <div className="mt-8 flex flex-col items-center gap-4">
+        <Heading variant="h1" className="text-center">
+          {person.name}
+        </Heading>
+        <TMDBPoster slug={person.profile_path} title={person.name} />
       </div>
       <Separator className="my-6" />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">

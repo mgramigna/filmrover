@@ -1,9 +1,10 @@
 import { ClickableDetail } from "@/components/clickable";
+import { TMDBPoster } from "@/components/tmdb-poster";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId, movieId } = params;
@@ -19,7 +20,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   ]);
 
   if (game.endMovieId === Number(movieId)) {
-    // TODO: redirect to victory page
+    return redirect(`/play/${gameId}/victory`);
   }
 
   const directors = credits.crew.filter(({ job }) => job === "Director") ?? [];
@@ -41,8 +42,11 @@ export default function MoviePage() {
 
   return (
     <div className="container px-4 pb-24 sm:px-0">
-      <div className="mt-8 text-center">
-        <Heading variant="h1">{movie.title}</Heading>
+      <div className="mt-8 flex flex-col items-center gap-4">
+        <Heading variant="h1" className="text-center">
+          {movie.title}
+        </Heading>
+        <TMDBPoster slug={movie.poster_path} title={movie.title} />
       </div>
       <Separator className="my-6" />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
