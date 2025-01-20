@@ -44,7 +44,10 @@ export default function MoviePage() {
     <div className="container px-4 pb-24 sm:px-0">
       <div className="mt-8 flex flex-col items-center gap-4">
         <Heading variant="h1" className="text-center">
-          {movie.title}
+          {movie.title}{" "}
+          {movie.release_date
+            ? `(${new Date(movie.release_date).getFullYear()})`
+            : ""}
         </Heading>
         <TMDBPoster slug={movie.poster_path} title={movie.title} />
       </div>
@@ -52,10 +55,17 @@ export default function MoviePage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div>
           <div>
-            <Heading variant="h3">Directing</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Directing
+            </Heading>
             <div className="flex flex-col gap-2">
               {uniqueDirectors
-                .sort((a, b) => b.popularity - a.popularity)
+                .sort((a, b) => {
+                  if (!a.popularity) return 1;
+                  if (!b.popularity) return -1;
+
+                  return b.popularity - a.popularity;
+                })
                 .map(({ credit_id, name, id }) => (
                   <ClickableDetail
                     href={`/play/${gameId}/p/${id}`}
@@ -70,10 +80,17 @@ export default function MoviePage() {
         </div>
         <div>
           <div>
-            <Heading variant="h3">Cast</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Cast
+            </Heading>
             <div className="flex flex-col gap-2">
               {credits.cast
-                .sort((a, b) => b.popularity - a.popularity)
+                .sort((a, b) => {
+                  if (!a.popularity) return 1;
+                  if (!b.popularity) return -1;
+
+                  return b.popularity - a.popularity;
+                })
                 .map(({ credit_id, id, name }) => (
                   <ClickableDetail
                     href={`/play/${gameId}/p/${id}`}
@@ -88,10 +105,17 @@ export default function MoviePage() {
         </div>
         <div>
           <div>
-            <Heading variant="h3">Crew</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Crew
+            </Heading>
             <div className="flex flex-col gap-2">
               {uniqueCrew
-                .sort((a, b) => b.popularity - a.popularity)
+                .sort((a, b) => {
+                  if (!a.popularity) return 1;
+                  if (!b.popularity) return -1;
+
+                  return b.popularity - a.popularity;
+                })
                 .map(({ id, credit_id, name, job }) => (
                   <ClickableDetail
                     href={`/play/${gameId}/p/${id}`}

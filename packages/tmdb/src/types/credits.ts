@@ -25,7 +25,7 @@ const CastOrCrewDetailSchema = z.object({
   known_for_department: DepartmentSchema,
   name: z.string(),
   original_name: z.string(),
-  popularity: z.number(),
+  popularity: z.number().optional(),
   profile_path: z.string().nullable(),
   credit_id: z.string(),
 });

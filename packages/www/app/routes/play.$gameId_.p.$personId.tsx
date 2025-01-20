@@ -26,7 +26,12 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const filteredCast =
     credits.cast
-      .sort((a, b) => b.popularity - a.popularity)
+      .sort((a, b) => {
+        if (!a.popularity) return 1;
+        if (!b.popularity) return -1;
+
+        return b.popularity - a.popularity;
+      })
       .filter(({ media_type }) => media_type === "movie")
       .filter(({ release_date }) => {
         if (!release_date) return false;
@@ -38,7 +43,12 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const filteredCrew =
     credits.crew
-      .sort((a, b) => b.popularity - a.popularity)
+      .sort((a, b) => {
+        if (!a.popularity) return 1;
+        if (!b.popularity) return -1;
+
+        return b.popularity - a.popularity;
+      })
       .filter(
         ({ media_type, department }) =>
           media_type === "movie" && department !== "Directing",
@@ -53,7 +63,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const directing =
     credits.crew
-      .sort((a, b) => b.popularity - a.popularity)
+      .sort((a, b) => {
+        if (!a.popularity) return 1;
+        if (!b.popularity) return -1;
+        return b.popularity - a.popularity;
+      })
       .filter(
         ({ media_type, department }) =>
           media_type === "movie" && department === "Directing",
@@ -78,7 +92,9 @@ export default function PersonPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div>
           <div>
-            <Heading variant="h3">Directing</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Directing
+            </Heading>
             <div className="flex flex-col gap-2">
               {directing.length > 0
                 ? directing.map(({ id, title, release_date }) => {
@@ -105,7 +121,9 @@ export default function PersonPage() {
         </div>
         <div>
           <div>
-            <Heading variant="h3">Cast</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Cast
+            </Heading>
             <div className="flex flex-col gap-2">
               {filteredCast.length > 0
                 ? filteredCast.map(({ id, title, release_date }) => {
@@ -132,7 +150,9 @@ export default function PersonPage() {
         </div>
         <div>
           <div>
-            <Heading variant="h3">Crew</Heading>
+            <Heading variant="h3" className="pb-2 text-center">
+              Crew
+            </Heading>
             <div className="flex flex-col gap-2">
               {filteredCrew.length > 0
                 ? filteredCrew.map(({ id, title, job }) => (
