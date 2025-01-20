@@ -1,7 +1,7 @@
+import { HistoryProvider } from "@/components/history-provider";
 import PersistentTimer from "@/components/timer";
 import { TimerProvider, useTimer } from "@/components/timer-provider";
 import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
 import { api } from "@/lib/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
@@ -38,9 +38,11 @@ export default function PlayHomepage() {
     .otherwise(() => "");
 
   return (
-    <TimerProvider gameId={game.id}>
-      <Helper destinationName={destinationName} />
-    </TimerProvider>
+    <HistoryProvider gameId={game.id}>
+      <TimerProvider gameId={game.id}>
+        <Helper destinationName={destinationName} />
+      </TimerProvider>
+    </HistoryProvider>
   );
 }
 
@@ -60,9 +62,9 @@ const Helper = ({ destinationName }: { destinationName: string }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-10 bg-primary text-primary-foreground py-2">
-        <div className="container px-4 sm:px-0">
-          <div className="flex items-center">
+      <div className="sticky top-0 z-10 h-12 bg-primary text-primary-foreground">
+        <div className="container h-full px-4 sm:px-0">
+          <div className="flex h-full items-center">
             <div className="flex-1">
               <PersistentTimer />
             </div>
@@ -72,9 +74,11 @@ const Helper = ({ destinationName }: { destinationName: string }) => {
               </p>
             </div>
             <div className="flex flex-1 justify-end">
-              <Button asChild variant="secondary">
-                <Link to="/">Give Up</Link>
-              </Button>
+              {!location.pathname.includes("/victory") && (
+                <Button asChild variant="secondary" size="sm">
+                  <Link to="/">Give Up</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>
