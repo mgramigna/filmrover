@@ -1,8 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, redirect, useLoaderData } from "@remix-run/react";
-import { z } from "zod";
-import { zfd } from "zod-form-data";
+import type { MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,24 +16,36 @@ export const loader = async () => {
   return challenge ?? null;
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const { startMovieId, startPersonId, endMovieId, endPersonId } = zfd
-    .formData({
-      startMovieId: zfd.numeric(z.number().optional()),
-      startPersonId: zfd.numeric(z.number().optional()),
-      endMovieId: zfd.numeric(z.number().optional()),
-      endPersonId: zfd.numeric(z.number().optional()),
-    })
-    .parse(await request.formData());
+const getGameLink = ({
+  endMovieId,
+  endPersonId,
+  startMovieId,
+  startPersonId,
+}: {
+  startMovieId: number | null;
+  startPersonId: number | null;
+  endMovieId: number | null;
+  endPersonId: number | null;
+}) => {
+  let res = "/play?";
 
-  const result = await api.game.create({
-    startMovieId,
-    startPersonId,
-    endMovieId,
-    endPersonId,
-  });
+  if (startMovieId) {
+    res += `start_movie_id=${startMovieId}&`;
+  }
 
-  return redirect(`/play/${result.gameId}/intro`);
+  if (startPersonId) {
+    res += `start_person_id=${startPersonId}&`;
+  }
+
+  if (endMovieId) {
+    res += `end_movie_id=${endMovieId}&`;
+  }
+
+  if (endPersonId) {
+    res += `end_person_id=${endPersonId}&`;
+  }
+
+  return res;
 };
 
 export default function Index() {
@@ -44,29 +55,18 @@ export default function Index() {
     <div>
       Daily C: {JSON.stringify(challenge)}
       {challenge && (
-        <Form method="POST">
-          <input
-            type="hidden"
-            name="startMovieId"
-            value={challenge.startMovieId ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="startPersonId"
-            value={challenge.startPersonId ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="endMovieId"
-            value={challenge.endMovieId ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="endPersonId"
-            value={challenge.endPersonId ?? undefined}
-          />
-          <button type="submit">Create Game</button>k
-        </Form>
+        <Button asChild>
+          <Link
+            to={getGameLink({
+              startMovieId: challenge.startMovieId,
+              startPersonId: challenge.startPersonId,
+              endMovieId: challenge.endMovieId,
+              endPersonId: challenge.endPersonId,
+            })}
+          >
+            Play Daily Challenge
+          </Link>
+        </Button>
       )}
     </div>
   );

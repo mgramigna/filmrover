@@ -23,15 +23,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const game = await api.game.getById(gameId);
 
-  const [startMovie, endMovie, startPerson, endPerson] = await Promise.all([
-    game.startMovieId
-      ? api.movie.getById(game.startMovieId)
-      : Promise.resolve(null),
+  const [endMovie, endPerson] = await Promise.all([
     game.endMovieId
       ? api.movie.getById(game.endMovieId)
-      : Promise.resolve(null),
-    game.startPersonId
-      ? api.person.getById(game.startPersonId)
       : Promise.resolve(null),
     game.endPersonId
       ? api.person.getById(game.endPersonId)
@@ -39,17 +33,13 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   ]);
 
   return {
-    game,
-    startMovie,
     endMovie,
-    startPerson,
     endPerson,
   };
 };
 
 export default function GameVictoryPage() {
-  const { game, endMovie, endPerson, startMovie, startPerson } =
-    useLoaderData<typeof loader>();
+  const { endMovie, endPerson } = useLoaderData<typeof loader>();
 
   const { history } = useHistory();
 
@@ -58,18 +48,6 @@ export default function GameVictoryPage() {
   useEffect(() => {
     stopTimer();
   }, [stopTimer]);
-
-  const startPoster = match({ startMovie, startPerson })
-    .returnType<{ slug: string | null; title: string }>()
-    .with({ startMovie: P.nonNullable }, ({ startMovie: movie }) => ({
-      slug: movie.poster_path,
-      title: movie.title,
-    }))
-    .with({ startPerson: P.nonNullable }, ({ startPerson: person }) => ({
-      slug: person.profile_path,
-      title: person.name,
-    }))
-    .otherwise(() => ({ slug: null, title: "" }));
 
   const endPoster = match({ endMovie, endPerson })
     .returnType<{ slug: string | null; title: string }>()
