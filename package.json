@@ -1,6 +1,7 @@
 {
   "name": "filmrover",
   "private": true,
+  "packageManager": "bun@latest",
   "scripts": {
     "build": "bun --filter=* build",
     "check": "bun --filter=* check",
