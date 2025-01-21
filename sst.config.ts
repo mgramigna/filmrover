@@ -27,6 +27,9 @@ export default $config({
           handler: "./packages/functions/src/handlers/dailyChallenge.handler",
           runtime: "nodejs22.x",
           link: [tmdbAccessToken, databaseUrl, databaseAuthToken],
+          nodejs: {
+            install: ["@libsql/linux-x64-gnu"],
+          },
         },
       });
     }
