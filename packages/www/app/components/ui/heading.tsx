@@ -5,12 +5,12 @@ import { match } from "ts-pattern";
 export const headingVariants = cva("", {
   variants: {
     variant: {
-      h1: "font-extrabold text-4xl tracking-tight",
-      h2: "font-semibold text-3xl tracking-tight",
-      h3: "font-semibold text-2xl",
-      h4: "font-semibold text-xl",
-      h5: "font-semibold text-lg",
-      h6: "font-semibold text-base",
+      h1: "font-extrabold text-4xl md:text-6xl tracking-tight",
+      h2: "font-bold text-3xl md:text-5xl tracking-tight",
+      h3: "font-semibold text-2xl md:text-4xl tracking-tight",
+      h4: "font-medium text-xl md:text-3xl",
+      h5: "font-medium text-lg md:text-2xl",
+      h6: "font-medium text-base md:text-xl",
     },
   },
   defaultVariants: {

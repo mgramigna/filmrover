@@ -4,10 +4,12 @@ export const TMDBPoster = ({
   slug,
   title,
   size = "default",
+  className,
 }: {
   slug: string | null;
   title?: string;
   size?: "default" | "sm";
+  className?: string;
 }) => {
   return (
     <div
@@ -15,6 +17,7 @@ export const TMDBPoster = ({
         "relative rounded-lg border",
         size === "default" && "h-[150px] w-[100px] sm:h-[300px] sm:w-[200px]",
         size === "sm" && "h-[150px] w-[100px]",
+        className,
       )}
     >
       {!slug && (

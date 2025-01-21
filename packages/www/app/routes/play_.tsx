@@ -1,6 +1,7 @@
 import { TMDBPoster } from "@/components/tmdb-poster";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, redirect, useLoaderData } from "@remix-run/react";
@@ -121,19 +122,25 @@ export default function Play() {
 
   return (
     <div className="container px-4 pb-24 sm:px-0">
-      <div className="mt-8 flex items-center justify-center gap-4">
-        <div className="flex flex-col items-center gap-4">
-          <Heading variant="h2" className="text-center">
-            {startPoster.title}
-          </Heading>
-          <TMDBPoster slug={startPoster.slug} title={startPoster.title} />
-        </div>
-        <ChevronRight />
-        <div className="flex flex-col items-center gap-4">
-          <Heading variant="h2" className="text-center">
-            {endPoster.title}
-          </Heading>
-          <TMDBPoster slug={endPoster.slug} title={endPoster.title} />
+      <div className="mt-12 flex flex-col items-center">
+        <Heading variant="h4" className="text-center">
+          Your Game
+        </Heading>
+        <Separator className="my-4" />
+        <div className="grid grid-cols-3 place-items-center">
+          <div className="flex flex-col items-center gap-4">
+            <Heading variant="h5" className="text-center">
+              {startPoster.title}
+            </Heading>
+            <TMDBPoster slug={startPoster.slug} title={startPoster.title} />
+          </div>
+          <ChevronRight />
+          <div className="flex flex-col items-center gap-4">
+            <Heading variant="h5" className="text-center">
+              {endPoster.title}
+            </Heading>
+            <TMDBPoster slug={endPoster.slug} title={endPoster.title} />
+          </div>
         </div>
       </div>
       <div className="mt-8 space-y-4 text-center">

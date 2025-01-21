@@ -97,10 +97,10 @@ export default function PersonPage() {
       </div>
       <Separator className="my-6" />
       <Accordion type="multiple" defaultValue={["directing", "cast", "crew"]}>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <AccordionItem value="directing">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Directing
               </Heading>
             </AccordionTrigger>
@@ -131,7 +131,7 @@ export default function PersonPage() {
           </AccordionItem>
           <AccordionItem value="cast">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Cast
               </Heading>
             </AccordionTrigger>
@@ -162,7 +162,7 @@ export default function PersonPage() {
           </AccordionItem>
           <AccordionItem value="crew">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Crew
               </Heading>
             </AccordionTrigger>

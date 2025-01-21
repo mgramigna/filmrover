@@ -50,7 +50,7 @@ export default function MoviePage() {
   return (
     <div className="container px-4 pb-24 sm:px-0">
       <div className="mt-8 flex flex-col items-center gap-4">
-        <Heading variant="h1" className="text-center">
+        <Heading variant="h2" className="text-center">
           {movie.title}{" "}
           {movie.release_date
             ? `(${new Date(movie.release_date).getFullYear()})`
@@ -60,10 +60,10 @@ export default function MoviePage() {
       </div>
       <Separator className="my-6" />
       <Accordion type="multiple" defaultValue={["directing", "cast", "crew"]}>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <AccordionItem value="directing">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Directing
               </Heading>
             </AccordionTrigger>
@@ -90,7 +90,7 @@ export default function MoviePage() {
           </AccordionItem>
           <AccordionItem value="cast">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Cast
               </Heading>
             </AccordionTrigger>
@@ -117,7 +117,7 @@ export default function MoviePage() {
           </AccordionItem>
           <AccordionItem value="crew">
             <AccordionTrigger>
-              <Heading variant="h3" className="pb-2 text-center">
+              <Heading variant="h4" className="pb-2 text-center">
                 Crew
               </Heading>
             </AccordionTrigger>

@@ -1,19 +1,22 @@
+import { TMDBPoster } from "@/components/tmdb-poster";
 import { Button } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { LoaderButton } from "@/components/ui/loader-button";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
-import type { MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Link, redirect, useFetcher, useLoaderData } from "@remix-run/react";
+import { ChevronRight } from "lucide-react";
+import { match, P } from "ts-pattern";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "FilmRover" },
+    {
+      name: "description",
+      content: "Test your movie knowledge, Wikipedia-game style!",
+    },
   ];
-};
-
-export const loader = async () => {
-  const challenge = await api.challenge.getCurrentDailyChallenge();
-
-  return challenge ?? null;
 };
 
 const getGameLink = ({
@@ -48,26 +51,152 @@ const getGameLink = ({
   return res;
 };
 
+export const loader = async () => {
+  const challenge = await api.challenge.getCurrentDailyChallenge();
+
+  const [startMovie, endMovie, startPerson, endPerson] = await Promise.all([
+    challenge?.startMovieId
+      ? api.movie.getById(challenge.startMovieId)
+      : Promise.resolve(null),
+    challenge?.endMovieId
+      ? api.movie.getById(challenge.endMovieId)
+      : Promise.resolve(null),
+    challenge?.startPersonId
+      ? api.person.getById(challenge.startPersonId)
+      : Promise.resolve(null),
+    challenge?.endPersonId
+      ? api.person.getById(challenge.endPersonId)
+      : Promise.resolve(null),
+  ]);
+
+  return { challenge, startMovie, endMovie, startPerson, endPerson };
+};
+
+export const action = async (_: ActionFunctionArgs) => {
+  const [randomMovie, randomPerson, randomMovie2, randomPerson2] =
+    await Promise.all([
+      api.movie.getRandomPopularMovie(),
+      api.person.getRandomPopularPerson(),
+      api.movie.getRandomPopularMovie(),
+      api.person.getRandomPopularPerson(),
+    ]);
+
+  let startMovieId: number | null = null;
+  let startPersonId: number | null = null;
+  let endMovieId: number | null = null;
+  let endPersonId: number | null = null;
+
+  if (Math.random() < 0.5) {
+    startMovieId = randomMovie.id;
+  } else {
+    startPersonId = randomPerson.id;
+  }
+
+  if (Math.random() < 0.5) {
+    endMovieId = randomMovie2.id;
+  } else {
+    endPersonId = randomPerson2.id;
+  }
+
+  return redirect(
+    getGameLink({ startMovieId, startPersonId, endMovieId, endPersonId }),
+  );
+};
+
 export default function Index() {
-  const challenge = useLoaderData<typeof loader>();
+  const { challenge, startMovie, endMovie, startPerson, endPerson } =
+    useLoaderData<typeof loader>();
+
+  const fetcher = useFetcher<typeof action>();
+
+  const startPoster = match({ startMovie, startPerson })
+    .returnType<{ slug: string | null; title: string }>()
+    .with({ startMovie: P.nonNullable }, ({ startMovie: movie }) => ({
+      slug: movie.poster_path,
+      title: movie.title,
+    }))
+    .with({ startPerson: P.nonNullable }, ({ startPerson: person }) => ({
+      slug: person.profile_path,
+      title: person.name,
+    }))
+    .otherwise(() => ({ slug: null, title: "" }));
+
+  const endPoster = match({ endMovie, endPerson })
+    .returnType<{ slug: string | null; title: string }>()
+    .with({ endMovie: P.nonNullable }, ({ endMovie: movie }) => ({
+      slug: movie.poster_path,
+      title: movie.title,
+    }))
+    .with({ endPerson: P.nonNullable }, ({ endPerson: person }) => ({
+      slug: person.profile_path,
+      title: person.name,
+    }))
+    .otherwise(() => ({ slug: null, title: "" }));
 
   return (
-    <div>
-      Daily C: {JSON.stringify(challenge)}
+    <div className="container px-4 pb-24 sm:px-0">
+      <div className="mt-12 space-y-2 text-center">
+        <Heading variant="h1">FilmRover</Heading>
+        <Heading variant="h3">
+          Test your movie knowledge, Wikipedia-game style!
+        </Heading>
+      </div>
       {challenge && (
-        <Button asChild>
-          <Link
-            to={getGameLink({
-              startMovieId: challenge.startMovieId,
-              startPersonId: challenge.startPersonId,
-              endMovieId: challenge.endMovieId,
-              endPersonId: challenge.endPersonId,
-            })}
-          >
-            Play Daily Challenge
-          </Link>
-        </Button>
+        <div className="mt-12 flex flex-col items-center">
+          <Heading variant="h4" className="text-center">
+            Today's Challenge
+          </Heading>
+          <Separator className="my-4" />
+          <div className="grid grid-cols-3 place-items-center">
+            <div className="flex flex-col items-center gap-4">
+              <Heading variant="h5" className="text-center">
+                {startPoster.title}
+              </Heading>
+              <TMDBPoster
+                slug={startPoster.slug}
+                title={startPoster.title}
+                size="sm"
+              />
+            </div>
+            <ChevronRight />
+            <div className="flex flex-col items-center gap-4">
+              <Heading variant="h5" className="text-center">
+                {endPoster.title}
+              </Heading>
+              <TMDBPoster
+                slug={endPoster.slug}
+                title={endPoster.title}
+                size="sm"
+              />
+            </div>
+          </div>
+          <Button asChild className="mt-8">
+            <Link
+              to={getGameLink({
+                startMovieId: challenge.startMovieId,
+                startPersonId: challenge.startPersonId,
+                endMovieId: challenge.endMovieId,
+                endPersonId: challenge.endPersonId,
+              })}
+            >
+              Play Daily Challenge
+            </Link>
+          </Button>
+        </div>
       )}
+      <Heading variant="h4" className="mt-12 text-center">
+        Or... play a random game
+      </Heading>
+      <fetcher.Form method="POST" className="flex justify-center">
+        <LoaderButton
+          type="submit"
+          className="mt-8"
+          variant="secondary"
+          isLoading={fetcher.state === "submitting"}
+        >
+          Generate Random Game
+        </LoaderButton>
+      </fetcher.Form>
     </div>
   );
 }
