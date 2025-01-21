@@ -18,6 +18,7 @@ export const ClickableDetail = ({
   return (
     <Button
       asChild
+      variant="secondary"
       className="w-full text-ellipsis whitespace-normal text-center"
       onClick={() => logHistory({ type, id, display: label })}
     >

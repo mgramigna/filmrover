@@ -90,7 +90,7 @@ export default function PersonPage() {
   return (
     <div className="container px-4 pb-24 sm:px-0">
       <div className="mt-8 flex flex-col items-center gap-4">
-        <Heading variant="h1" className="text-center">
+        <Heading variant="h3" className="text-center">
           {person.name}
         </Heading>
         <TMDBPoster slug={person.profile_path} title={person.name} />
@@ -106,26 +106,28 @@ export default function PersonPage() {
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col gap-2">
-                {directing.length > 0
-                  ? directing.map(({ id, title, release_date }) => {
-                      const releaseDate = release_date
-                        ? new Date(release_date)
-                        : undefined;
+                {directing.length > 0 ? (
+                  directing.map(({ id, title, release_date }) => {
+                    const releaseDate = release_date
+                      ? new Date(release_date)
+                      : undefined;
 
-                      return (
-                        <div key={id}>
-                          {title && (
-                            <ClickableDetail
-                              href={`/play/${gameId}/m/${id}`}
-                              label={`${title} (${releaseDate?.getFullYear()})`}
-                              type="movie"
-                              id={id}
-                            />
-                          )}
-                        </div>
-                      );
-                    })
-                  : null}
+                    return (
+                      <div key={id}>
+                        {title && (
+                          <ClickableDetail
+                            href={`/play/${gameId}/m/${id}`}
+                            label={`${title} (${releaseDate?.getFullYear()})`}
+                            type="movie"
+                            id={id}
+                          />
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-muted-foreground">No Directing credits</p>
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -137,26 +139,28 @@ export default function PersonPage() {
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col gap-2">
-                {filteredCast.length > 0
-                  ? filteredCast.map(({ id, title, release_date }) => {
-                      const releaseDate = release_date
-                        ? new Date(release_date)
-                        : undefined;
+                {filteredCast.length > 0 ? (
+                  filteredCast.map(({ id, title, release_date }) => {
+                    const releaseDate = release_date
+                      ? new Date(release_date)
+                      : undefined;
 
-                      return (
-                        <div key={id}>
-                          {title && (
-                            <ClickableDetail
-                              href={`/play/${gameId}/m/${id}`}
-                              label={`${title} (${releaseDate?.getFullYear()})`}
-                              type="movie"
-                              id={id}
-                            />
-                          )}
-                        </div>
-                      );
-                    })
-                  : null}
+                    return (
+                      <div key={id}>
+                        {title && (
+                          <ClickableDetail
+                            href={`/play/${gameId}/m/${id}`}
+                            label={`${title} (${releaseDate?.getFullYear()})`}
+                            type="movie"
+                            id={id}
+                          />
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-muted-foreground">No Cast credits</p>
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -168,17 +172,19 @@ export default function PersonPage() {
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col gap-2">
-                {filteredCrew.length > 0
-                  ? filteredCrew.map(({ id, title, job }) => (
-                      <ClickableDetail
-                        key={id}
-                        href={`/play/${gameId}/m/${id}`}
-                        label={`${title} (${job})`}
-                        type="movie"
-                        id={id}
-                      />
-                    ))
-                  : null}
+                {filteredCrew.length > 0 ? (
+                  filteredCrew.map(({ id, title, job }) => (
+                    <ClickableDetail
+                      key={id}
+                      href={`/play/${gameId}/m/${id}`}
+                      label={`${title} (${job})`}
+                      type="movie"
+                      id={id}
+                    />
+                  ))
+                ) : (
+                  <p className="text-muted-foreground">No Crew credits</p>
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>

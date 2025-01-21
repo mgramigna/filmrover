@@ -50,7 +50,7 @@ export default function MoviePage() {
   return (
     <div className="container px-4 pb-24 sm:px-0">
       <div className="mt-8 flex flex-col items-center gap-4">
-        <Heading variant="h2" className="text-center">
+        <Heading variant="h3" className="text-center">
           {movie.title}{" "}
           {movie.release_date
             ? `(${new Date(movie.release_date).getFullYear()})`

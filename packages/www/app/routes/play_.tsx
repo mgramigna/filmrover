@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, redirect, useLoaderData } from "@remix-run/react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Clapperboard } from "lucide-react";
 import { match, P } from "ts-pattern";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -122,60 +122,72 @@ export default function Play() {
 
   return (
     <div className="container px-4 pb-24 sm:px-0">
-      <div className="mt-12 flex flex-col items-center">
-        <Heading variant="h4" className="text-center">
-          Your Game
-        </Heading>
-        <Separator className="my-4" />
-        <div className="grid grid-cols-3 place-items-center">
-          <div className="flex flex-col items-center gap-4">
-            <Heading variant="h5" className="text-center">
-              {startPoster.title}
-            </Heading>
-            <TMDBPoster slug={startPoster.slug} title={startPoster.title} />
-          </div>
-          <ChevronRight />
-          <div className="flex flex-col items-center gap-4">
-            <Heading variant="h5" className="text-center">
-              {endPoster.title}
-            </Heading>
-            <TMDBPoster slug={endPoster.slug} title={endPoster.title} />
+      <div className="m-auto max-w-screen-md">
+        <div className="mt-12">
+          <Heading variant="h4">Your Game</Heading>
+          <Separator className="my-4" />
+          <div className="grid grid-cols-3 place-items-center px-8 md:px-12 lg:px-24">
+            <div className="flex flex-col items-center gap-4">
+              <Heading variant="h5" className="text-center">
+                {startPoster.title}
+              </Heading>
+              <TMDBPoster slug={startPoster.slug} title={startPoster.title} />
+            </div>
+            <ChevronRight />
+            <div className="flex flex-col items-center gap-4">
+              <Heading variant="h5" className="text-center">
+                {endPoster.title}
+              </Heading>
+              <TMDBPoster slug={endPoster.slug} title={endPoster.title} />
+            </div>
           </div>
         </div>
+        <div className="flex justify-center">
+          <ul className="mt-12 space-y-8">
+            <li className="flex items-center gap-2">
+              <Clapperboard className="text-muted-foreground" />
+              <div className="flex-1">
+                Navigate from {startPoster.title} to {endPoster.title} by
+                clicking links
+              </div>
+            </li>
+            <li className="flex items-center gap-2">
+              <Clapperboard className="text-muted-foreground" />
+              <div className="flex-1">
+                Go as fast as you can, or try to minimize the number of clicks
+                used.
+              </div>
+            </li>
+            <li className="flex items-center gap-2">
+              <Clapperboard className="text-muted-foreground" />
+              <div className="flex-1">Have fun!</div>
+            </li>
+          </ul>
+        </div>
+        <Form method="POST" className="mt-8 flex justify-center">
+          <input
+            type="hidden"
+            name="startMovieId"
+            value={startMovie?.id ?? undefined}
+          />
+          <input
+            type="hidden"
+            name="startPersonId"
+            value={startPerson?.id ?? undefined}
+          />
+          <input
+            type="hidden"
+            name="endMovieId"
+            value={endMovie?.id ?? undefined}
+          />
+          <input
+            type="hidden"
+            name="endPersonId"
+            value={endPerson?.id ?? undefined}
+          />
+          <Button type="submit">Start</Button>
+        </Form>
       </div>
-      <div className="mt-8 space-y-4 text-center">
-        <p>
-          Navigate from {startPoster.title} to {endPoster.title} by clicking on
-          various credits as you go along
-        </p>
-        <p>
-          Try to do it as fast as you can, or try to minimize the number of
-          clicks used. Or... both!
-        </p>
-      </div>
-      <Form method="POST" className="mt-8 flex justify-center">
-        <input
-          type="hidden"
-          name="startMovieId"
-          value={startMovie?.id ?? undefined}
-        />
-        <input
-          type="hidden"
-          name="startPersonId"
-          value={startPerson?.id ?? undefined}
-        />
-        <input
-          type="hidden"
-          name="endMovieId"
-          value={endMovie?.id ?? undefined}
-        />
-        <input
-          type="hidden"
-          name="endPersonId"
-          value={endPerson?.id ?? undefined}
-        />
-        <Button type="submit">Start</Button>
-      </Form>
     </div>
   );
 }

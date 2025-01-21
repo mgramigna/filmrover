@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, redirect, useFetcher, useLoaderData } from "@remix-run/react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Clapperboard } from "lucide-react";
 import { match, P } from "ts-pattern";
 
 export const meta: MetaFunction = () => {
@@ -113,7 +113,7 @@ export default function Index() {
     .returnType<{ slug: string | null; title: string }>()
     .with({ startMovie: P.nonNullable }, ({ startMovie: movie }) => ({
       slug: movie.poster_path,
-      title: movie.title,
+      title: `${movie.title}${movie.release_date ? ` (${new Date(movie.release_date).getFullYear()})` : ""}`,
     }))
     .with({ startPerson: P.nonNullable }, ({ startPerson: person }) => ({
       slug: person.profile_path,
@@ -125,7 +125,7 @@ export default function Index() {
     .returnType<{ slug: string | null; title: string }>()
     .with({ endMovie: P.nonNullable }, ({ endMovie: movie }) => ({
       slug: movie.poster_path,
-      title: movie.title,
+      title: `${movie.title}${movie.release_date ? ` (${new Date(movie.release_date).getFullYear()})` : ""}`,
     }))
     .with({ endPerson: P.nonNullable }, ({ endPerson: person }) => ({
       slug: person.profile_path,
@@ -135,68 +135,95 @@ export default function Index() {
 
   return (
     <div className="container px-4 pb-24 sm:px-0">
-      <div className="mt-12 space-y-2 text-center">
-        <Heading variant="h1">FilmRover</Heading>
-        <Heading variant="h3">
-          Test your movie knowledge, Wikipedia-game style!
-        </Heading>
-      </div>
-      {challenge && (
-        <div className="mt-12 flex flex-col items-center">
-          <Heading variant="h4" className="text-center">
-            Today's Challenge
+      <div className="m-auto max-w-screen-md">
+        <div className="mt-12 space-y-4 text-center">
+          <Heading variant="h1">FilmRover</Heading>
+          <Heading variant="h3">
+            Test your movie knowledge, Wikipedia-game style!
           </Heading>
-          <Separator className="my-4" />
-          <div className="grid grid-cols-3 place-items-center">
-            <div className="flex flex-col items-center gap-4">
-              <Heading variant="h5" className="text-center">
-                {startPoster.title}
-              </Heading>
-              <TMDBPoster
-                slug={startPoster.slug}
-                title={startPoster.title}
-                size="sm"
-              />
+        </div>
+        {challenge && (
+          <div className="mt-12">
+            <Heading variant="h4">Today's Challenge</Heading>
+            <Separator className="my-4" />
+            <div className="grid grid-cols-3 place-items-center px-8 md:px-12 lg:px-24">
+              <div className="flex flex-col items-center gap-4">
+                <Heading variant="h5" className="text-center">
+                  {startPoster.title}
+                </Heading>
+                <TMDBPoster
+                  slug={startPoster.slug}
+                  title={startPoster.title}
+                  size="sm"
+                />
+              </div>
+              <ChevronRight />
+              <div className="flex flex-col items-center gap-4">
+                <Heading variant="h5" className="text-center">
+                  {endPoster.title}
+                </Heading>
+                <TMDBPoster
+                  slug={endPoster.slug}
+                  title={endPoster.title}
+                  size="sm"
+                />
+              </div>
             </div>
-            <ChevronRight />
-            <div className="flex flex-col items-center gap-4">
-              <Heading variant="h5" className="text-center">
-                {endPoster.title}
-              </Heading>
-              <TMDBPoster
-                slug={endPoster.slug}
-                title={endPoster.title}
-                size="sm"
-              />
+            <div className="flex justify-center">
+              <Button asChild className="mt-8">
+                <Link
+                  to={getGameLink({
+                    startMovieId: challenge.startMovieId,
+                    startPersonId: challenge.startPersonId,
+                    endMovieId: challenge.endMovieId,
+                    endPersonId: challenge.endPersonId,
+                  })}
+                >
+                  Play Daily Challenge
+                </Link>
+              </Button>
             </div>
           </div>
-          <Button asChild className="mt-8">
-            <Link
-              to={getGameLink({
-                startMovieId: challenge.startMovieId,
-                startPersonId: challenge.startPersonId,
-                endMovieId: challenge.endMovieId,
-                endPersonId: challenge.endPersonId,
-              })}
-            >
-              Play Daily Challenge
-            </Link>
-          </Button>
-        </div>
-      )}
-      <Heading variant="h4" className="mt-12 text-center">
-        Or... play a random game
-      </Heading>
-      <fetcher.Form method="POST" className="flex justify-center">
-        <LoaderButton
-          type="submit"
-          className="mt-8"
-          variant="secondary"
-          isLoading={fetcher.state === "submitting"}
-        >
-          Generate Random Game
-        </LoaderButton>
-      </fetcher.Form>
+        )}
+        <Heading variant="h4" className="mt-12 text-center">
+          Or... play a random game
+        </Heading>
+        <fetcher.Form method="POST" className="flex justify-center">
+          <LoaderButton
+            type="submit"
+            className="mt-8"
+            variant="secondary"
+            isLoading={fetcher.state === "submitting"}
+          >
+            Generate Random Game
+          </LoaderButton>
+        </fetcher.Form>
+        <Heading variant="h4" className="mt-12">
+          How to Play
+        </Heading>
+        <Separator className="my-4" />
+        <ul className="mt-12 space-y-8">
+          <li className="flex items-center gap-2">
+            <Clapperboard className="text-muted-foreground" />
+            <div className="flex-1">
+              Navigate from your start to destination by clicking links
+            </div>
+          </li>
+          <li className="flex items-center gap-2">
+            <Clapperboard className="text-muted-foreground" />
+            <div className="flex-1">
+              Movies link to people, and people link to movies
+            </div>
+          </li>
+          <li className="flex items-center gap-2">
+            <Clapperboard className="text-muted-foreground" />
+            <div className="flex-1">
+              Click wisely! A lot more connections exist than you might think,
+              but one wrong click can ruin your day
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
