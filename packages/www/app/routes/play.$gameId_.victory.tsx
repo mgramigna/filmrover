@@ -11,7 +11,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId } = params;

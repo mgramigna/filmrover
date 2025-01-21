@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, redirect, useFetcher, useLoaderData } from "@remix-run/react";
 import { ChevronRight, Clapperboard } from "lucide-react";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 
 export const meta: MetaFunction = () => {
   return [

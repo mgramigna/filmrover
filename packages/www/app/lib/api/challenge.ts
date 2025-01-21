@@ -1,6 +1,6 @@
 import { dailyChallenge, db, eq } from "@filmrover/db";
 import { TMDBClient } from "@filmrover/tmdb";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 
 export const challenge = {
   addDailyChallenge: async (input: {

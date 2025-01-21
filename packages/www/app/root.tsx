@@ -1,3 +1,4 @@
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Link,
   Links,
@@ -7,25 +8,24 @@ import {
   ScrollRestoration,
   useRouteLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import "./tailwind.css";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./components/ui/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
-import { Button } from "./components/ui/button";
-import { themeSessionResolver } from "./sessions.server";
 import {
   PreventFlashOnWrongTheme,
   Theme,
   ThemeProvider,
   useTheme,
 } from "remix-themes";
+import { Button } from "./components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./components/ui/dropdown-menu";
 import { Toaster } from "./components/ui/sonner";
+import { themeSessionResolver } from "./sessions.server";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },

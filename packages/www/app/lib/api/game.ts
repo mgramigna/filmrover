@@ -1,4 +1,4 @@
-import { db, games, eq } from "@filmrover/db";
+import { db, eq, games } from "@filmrover/db";
 
 export const game = {
   getById: async (id: string) => {

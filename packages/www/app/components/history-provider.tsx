@@ -1,10 +1,10 @@
 import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
   type ReactNode,
+  createContext,
   useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 
 const CLICK_HISTORY_KEY = "clickHistory";

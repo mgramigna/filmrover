@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { useEffect } from "react";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId } = params;

@@ -5,14 +5,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { api } from "@/lib/api";
-import { isBefore } from "date-fns/isBefore";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { redirect, useLoaderData } from "@remix-run/react";
 import { ClickableDetail } from "@/components/clickable";
+import { TMDBPoster } from "@/components/tmdb-poster";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { TMDBPoster } from "@/components/tmdb-poster";
+import { api } from "@/lib/api";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { redirect, useLoaderData } from "@remix-run/react";
+import { isBefore } from "date-fns/isBefore";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId, personId } = params;

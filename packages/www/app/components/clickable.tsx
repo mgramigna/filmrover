@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
-import { Button } from "./ui/button";
 import { useHistory } from "./history-provider";
+import { Button } from "./ui/button";
 
 export const ClickableDetail = ({
   href,
