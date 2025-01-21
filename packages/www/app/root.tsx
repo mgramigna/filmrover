@@ -25,6 +25,7 @@ import {
   ThemeProvider,
   useTheme,
 } from "remix-themes";
+import { Toaster } from "./components/ui/sonner";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -129,6 +130,7 @@ function InnerLayout({
         <ScrollRestoration />
         <Scripts />
         <PreventFlashOnWrongTheme ssrTheme={ssrTheme} />
+        <Toaster />
       </body>
     </html>
   );

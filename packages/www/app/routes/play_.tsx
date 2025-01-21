@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, redirect, useLoaderData } from "@remix-run/react";
 import { ChevronRight, Clapperboard } from "lucide-react";
+import { toast } from "sonner";
 import { match, P } from "ts-pattern";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -164,29 +165,46 @@ export default function Play() {
             </li>
           </ul>
         </div>
-        <Form method="POST" className="mt-8 flex justify-center">
-          <input
-            type="hidden"
-            name="startMovieId"
-            value={startMovie?.id ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="startPersonId"
-            value={startPerson?.id ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="endMovieId"
-            value={endMovie?.id ?? undefined}
-          />
-          <input
-            type="hidden"
-            name="endPersonId"
-            value={endPerson?.id ?? undefined}
-          />
-          <Button type="submit">Start</Button>
-        </Form>
+        <div className="mt-8 flex items-center justify-center gap-2">
+          <Button
+            variant="ghost"
+            onClick={() => {
+              navigator.clipboard
+                .writeText(window.location.href)
+                .then(() => {
+                  toast.success("Copied link to clipboard");
+                })
+                .catch(() => {
+                  toast.error("Something went wrong");
+                });
+            }}
+          >
+            Copy Game Link
+          </Button>
+          <Form method="POST">
+            <input
+              type="hidden"
+              name="startMovieId"
+              value={startMovie?.id ?? undefined}
+            />
+            <input
+              type="hidden"
+              name="startPersonId"
+              value={startPerson?.id ?? undefined}
+            />
+            <input
+              type="hidden"
+              name="endMovieId"
+              value={endMovie?.id ?? undefined}
+            />
+            <input
+              type="hidden"
+              name="endPersonId"
+              value={endPerson?.id ?? undefined}
+            />
+            <Button type="submit">Start</Button>
+          </Form>
+        </div>
       </div>
     </div>
   );
