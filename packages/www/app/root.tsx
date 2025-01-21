@@ -124,7 +124,7 @@ function InnerLayout({
             </div>
           </div>
         </nav>
-        <div className="flex h-screen flex-col">
+        <div className="flex h-[100dvh] flex-col">
           <main className="flex flex-1 flex-col overflow-auto">{children}</main>
         </div>
         <ScrollRestoration />
