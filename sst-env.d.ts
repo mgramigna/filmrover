@@ -13,6 +13,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "REMIX_COOKIE_SECRET": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "RemixApp": {
       "type": "sst.aws.Remix"
       "url": string

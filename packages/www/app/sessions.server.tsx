@@ -1,16 +1,16 @@
 import { createCookieSessionStorage } from "@remix-run/node";
 import { createThemeSessionResolver } from "remix-themes";
+import { Resource } from "sst";
 
-// TODO: secrets
 const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "__remix-themes",
-    // domain: 'remix.run',
+    domain: process.env.STAGE === "production" ? process.env.DOMAIN : undefined,
     path: "/",
     httpOnly: true,
     sameSite: "lax",
-    secrets: ["s3cr3t"],
-    // secure: true,
+    secrets: [Resource.REMIX_COOKIE_SECRET.value],
+    secure: process.env.STAGE === "production",
   },
 });
 
