@@ -41,6 +41,7 @@ export default $config({
       ],
       server: {
         runtime: "nodejs22.x",
+        install: ["@libsql/linux-x64-gnu"],
       },
       environment: {
         STAGE: $app.stage,
