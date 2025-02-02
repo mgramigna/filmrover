@@ -62,7 +62,7 @@ const Helper = ({ destinationName }: { destinationName: string }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-10 h-12 bg-accent text-accent-foreground">
+      <div className="sticky top-0 z-10 bg-accent py-2 text-accent-foreground sm:py-4">
         <div className="container h-full px-4 sm:px-0">
           <div className="flex h-full items-center">
             <div className="flex-1">

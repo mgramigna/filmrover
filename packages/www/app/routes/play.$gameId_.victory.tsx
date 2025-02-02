@@ -131,12 +131,15 @@ export default function GameVictoryPage() {
             {history.length} click{history.length === 1 ? "" : "s"}
           </Heading>
           <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <p className={cn("text-center font-bold")}>{start.title}</p>
+              <ChevronRight />
+            </div>
             {history.map((entry, i) => (
               <div key={entry.id} className="flex items-center gap-2">
                 <p
                   className={cn(
                     "text-center",
-                    i === 0 && "font-bold",
                     i === history.length - 1 && "font-bold text-primary",
                   )}
                 >
