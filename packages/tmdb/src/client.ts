@@ -1,22 +1,25 @@
-import type { Result } from "neverthrow";
-import type { ZodType, ZodTypeDef } from "zod";
 import dayjs from "dayjs";
+import type { Result } from "neverthrow";
 import { ResultAsync } from "neverthrow";
+import type { ZodType, ZodTypeDef } from "zod";
 
+import { Resource } from "sst";
 import type { MovieDetail, MovieSearchResult } from "./types";
-import type { MovieCredit, PersonCredit } from "./types/credits";
-import type { PersonDetail, PersonSearchResult } from "./types/person";
 import { MovieDetailSchema, MovieSearchResultSchema } from "./types";
+import type { MovieCredit, PersonCredit } from "./types/credits";
 import { MovieCreditSchema, PersonCreditSchema } from "./types/credits";
+import type { PersonDetail, PersonSearchResult } from "./types/person";
 import { PersonDetailSchema, PersonSearchResultSchema } from "./types/person";
 
 const TMDB_API_URL = "https://api.themoviedb.org/3";
 
 export class TMDBClient {
   baseUrl: string;
+  bearerToken: string;
 
-  constructor(public bearerToken: string) {
+  constructor() {
     this.baseUrl = TMDB_API_URL;
+    this.bearerToken = Resource.TMDB_ACCESS_TOKEN.value;
   }
 
   private fetch<T>({
@@ -29,8 +32,6 @@ export class TMDBClient {
     query?: string;
   }): ResultAsync<T, Error> {
     const queryString = query ? `?${query}` : "";
-
-    console.log(`[TMDB] GET ${path}${queryString}`);
 
     return ResultAsync.fromPromise(
       fetch(`${this.baseUrl}/${path}${queryString}`, {

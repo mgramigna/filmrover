@@ -26,7 +26,7 @@ export const MovieDetailSchema = z.object({
   original_language: z.string(),
   original_title: z.string().optional(),
   overview: z.string(),
-  popularity: z.number(),
+  popularity: z.number().optional(),
   poster_path: z.string().nullable(),
   production_companies: z
     .object({
@@ -56,8 +56,8 @@ export const MovieDetailSchema = z.object({
   tagline: z.string(),
   title: z.string(),
   video: z.boolean(),
-  vote_average: z.number(),
-  vote_count: z.number(),
+  vote_average: z.number().optional(),
+  vote_count: z.number().optional(),
 });
 
 export type MovieDetail = z.infer<typeof MovieDetailSchema>;
