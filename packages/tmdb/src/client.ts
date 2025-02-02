@@ -156,6 +156,7 @@ export class TMDBClient {
       path: "/movie/popular",
       query: new URLSearchParams({
         page: page.toString(),
+        language: "en-US",
       }).toString(),
     });
 
@@ -192,6 +193,7 @@ export class TMDBClient {
       path: "/person/popular",
       query: new URLSearchParams({
         page: page.toString(),
+        language: "en-US",
       }).toString(),
     });
 

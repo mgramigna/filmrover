@@ -41,6 +41,17 @@ export const person = {
 
     const { results } = result.value;
 
-    return results[Math.floor(Math.random() * results.length)];
+    const filteredResults = results.filter(
+      (person) =>
+        person.name === person.original_name &&
+        !person.adult &&
+        person.known_for?.at(0)?.media_type === "movie",
+    );
+
+    if (filteredResults.length === 0) {
+      return results[0];
+    }
+
+    return filteredResults[Math.floor(Math.random() * filteredResults.length)];
   },
 };

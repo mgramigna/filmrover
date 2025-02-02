@@ -31,7 +31,7 @@ export const movie = {
     // Choose between the first 10 pages of popular people
     const randomPage = Math.floor(Math.random() * 10) + 1;
 
-    const result = await tmdb.discoverMovies({
+    const result = await tmdb.searchPopularMovies({
       page: randomPage,
     });
 
@@ -41,6 +41,14 @@ export const movie = {
 
     const { results } = result.value;
 
-    return results[Math.floor(Math.random() * results.length)];
+    const filteredResults = results.filter(
+      (movie) => movie.original_language === "en" && !movie.adult,
+    );
+
+    if (filteredResults.length === 0) {
+      return results[0];
+    }
+
+    return filteredResults[Math.floor(Math.random() * filteredResults.length)];
   },
 };

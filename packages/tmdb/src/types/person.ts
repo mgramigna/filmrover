@@ -17,6 +17,17 @@ export const PersonSearchResultSchema = BaseSearchResultSchema.extend({
     .object({
       id: z.number(),
       name: z.string(),
+      original_name: z.string().optional(),
+      adult: z.boolean().optional(),
+      known_for: z
+        .array(
+          z.object({
+            id: z.number(),
+            media_type: z.enum(["movie", "tv"]).optional(),
+            adult: z.boolean().optional(),
+          }),
+        )
+        .optional(),
     })
     .array(),
 });
