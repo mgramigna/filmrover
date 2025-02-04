@@ -3,10 +3,20 @@ import PersistentTimer from "@/components/timer";
 import { TimerProvider, useTimer } from "@/components/timer-provider";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 import { P, match } from "ts-pattern";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "FilmRover Game" },
+    {
+      name: "description",
+      content: "Test your movie knowledge, Wikipedia-game style!",
+    },
+  ];
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { gameId } = params;

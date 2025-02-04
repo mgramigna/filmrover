@@ -3,13 +3,27 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { Form, redirect, useLoaderData } from "@remix-run/react";
 import { ChevronRight, Clapperboard } from "lucide-react";
 import { toast } from "sonner";
 import { P, match } from "ts-pattern";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "FilmRover | Play" },
+    {
+      name: "description",
+      content: "Test your movie knowledge, Wikipedia-game style!",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
