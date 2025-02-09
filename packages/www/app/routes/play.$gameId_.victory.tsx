@@ -3,6 +3,12 @@ import { formatTime } from "@/components/timer";
 import { useTimer } from "@/components/timer-provider";
 import { TMDBPoster } from "@/components/tmdb-poster";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Heading } from "@/components/ui/heading";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -150,31 +156,77 @@ export default function GameVictoryPage() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                const gameLink = getGameLink();
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    const gameLink = getGameLink();
 
-                const text = `I just got from ${start.title} to ${end.title} in ${formatTime(seconds)} with ${
-                  history.length - 1
-                } clicks on FilmRover! Give it a shot! ${gameLink}`;
+                    const text = `I just got from ${start.title} to ${end.title} in ${formatTime(seconds)} with ${
+                      history.length - 1
+                    } clicks on FilmRover! Give it a shot! ${gameLink}`;
 
-                if (navigator.share) {
-                  navigator.share({ text }).catch(console.error);
-                } else {
-                  navigator.clipboard
-                    .writeText(text)
-                    .then(() => {
-                      toast.success("Copied link to clipboard");
-                    })
-                    .catch(() => {
-                      toast.error("Something went wrong");
-                    });
-                }
-              }}
-            >
-              Share
-            </Button>
+                    if (navigator.share) {
+                      navigator.share({ text }).catch(console.error);
+                    } else {
+                      navigator.clipboard
+                        .writeText(text)
+                        .then(() => {
+                          toast.success("Copied link to clipboard");
+                        })
+                        .catch(() => {
+                          toast.error("Something went wrong");
+                        });
+                    }
+                  }}
+                >
+                  Share
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    navigator.clipboard
+                      .writeText(getGameLink())
+                      .then(() => {
+                        toast.success("Copied link to clipboard");
+                      })
+                      .catch(() => {
+                        toast.error("Something went wrong");
+                      });
+                  }}
+                >
+                  Copy Game Link
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    const gameLink = getGameLink();
+
+                    const text = `I just got from ${start.title} to ${end.title} in ${formatTime(seconds)} with ${
+                      history.length - 1
+                    } clicks on FilmRover! Give it a shot! ${gameLink}`;
+
+                    if (navigator.share) {
+                      navigator.share({ text }).catch(console.error);
+                    } else {
+                      navigator.clipboard
+                        .writeText(text)
+                        .then(() => {
+                          toast.success("Copied link to clipboard");
+                        })
+                        .catch(() => {
+                          toast.error("Something went wrong");
+                        });
+                    }
+                  }}
+                >
+                  Share Via...
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button asChild>
               <Link to="/">Play again</Link>
             </Button>

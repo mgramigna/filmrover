@@ -141,18 +141,19 @@ export default function Play() {
         <div className="mt-12">
           <Heading variant="h4">Your Game</Heading>
           <Separator className="my-4" />
-          <div className="grid grid-cols-3 place-items-center px-8 md:px-12 lg:px-24">
+          <div className="grid grid-cols-3 place-items-center gap-y-4 px-8 md:px-12 lg:px-24">
+            <Heading variant="h5" className="text-center">
+              {startPoster.title}
+            </Heading>
+            <div />
+            <Heading variant="h5" className="text-center">
+              {endPoster.title}
+            </Heading>
             <div className="flex flex-col items-center gap-4">
-              <Heading variant="h5" className="text-center">
-                {startPoster.title}
-              </Heading>
               <TMDBPoster slug={startPoster.slug} title={startPoster.title} />
             </div>
             <ChevronRight />
             <div className="flex flex-col items-center gap-4">
-              <Heading variant="h5" className="text-center">
-                {endPoster.title}
-              </Heading>
               <TMDBPoster slug={endPoster.slug} title={endPoster.title} />
             </div>
           </div>
