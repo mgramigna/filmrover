@@ -164,7 +164,7 @@ export default function GameVictoryPage() {
                     const gameLink = getGameLink();
 
                     const text = `I just got from ${start.title} to ${end.title} in ${formatTime(seconds)} with ${
-                      history.length - 1
+                      history.length
                     } clicks on FilmRover! Give it a shot! ${gameLink}`;
 
                     if (navigator.share) {
@@ -206,7 +206,7 @@ export default function GameVictoryPage() {
                     const gameLink = getGameLink();
 
                     const text = `I just got from ${start.title} to ${end.title} in ${formatTime(seconds)} with ${
-                      history.length - 1
+                      history.length
                     } clicks on FilmRover! Give it a shot! ${gameLink}`;
 
                     if (navigator.share) {
